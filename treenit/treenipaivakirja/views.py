@@ -501,7 +501,7 @@ def recovery(request):
     else:
         sleep_duration_json = tr.sleep_duration_to_json(sleep_df)
         sleep_score_json = tr.sleep_score_to_json(sleep_df)
-        sleep_end_date = sleep_df['date'].iloc[-1]
+        sleep_end_date = datetime.strptime(sleep_df['date'].iloc[-1],'%Y-%m-%d')
 
     recharge_df = tr.recharge_to_df(user_id)
     if recharge_df.empty:
@@ -511,12 +511,12 @@ def recovery(request):
     else:
         recharge_hr_json = tr.recharge_hr_to_json(recharge_df)
         recharge_hrv_json = tr.recharge_hrv_to_json(recharge_df)
-        recharge_end_date = recharge_df['date'].iloc[-1]
+        recharge_end_date = datetime.strptime(recharge_df['date'].iloc[-1],'%Y-%m-%d')
     
     end_date = max(sleep_end_date, recharge_end_date)
     last_month = end_date.month-1 if end_date.month > 1 else 12
-    start_date = '{}-{}-01'.format(end_date.year, ('0'+str(last_month))[-2:])
-    end_date = str(end_date)
+    start_date = '01.{}.{}'.format(('0'+str(last_month))[-2:], end_date.year)
+    end_date = datetime.strftime(end_date, '%d.%m.%Y')
 
     return render(request, 'recovery.html', 
         context = {

@@ -284,6 +284,7 @@ def sleep_to_df(user_id):
     sleep = PolarSleep.objects.filter(polar_user_id__user=user_id).values_list(
         'date','duration','sleep_score').order_by('date')
     sleep_df = pd.DataFrame(sleep, columns = ['date','duration','score'])
+    sleep_df['date'] = sleep_df['date'].astype(str)
     return sleep_df
 
 
@@ -301,6 +302,7 @@ def recharge_to_df(user_id):
     recharge = PolarRecharge.objects.filter(polar_user_id__user=user_id).values_list(
         'date','heart_rate_avg','heart_rate_variability_avg').order_by('date')
     recharge_df = pd.DataFrame(recharge, columns=['date','heart_rate_avg','heart_rate_variability_avg'])
+    recharge_df['date'] = recharge_df['date'].astype(str)
     return recharge_df
 
 

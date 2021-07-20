@@ -6,7 +6,7 @@
 {% block header-right %}
 <div class="dropdown">
   <button class="btn btn-sm btn-primary dropdown-toggle mr-2" type="button" id="import" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fa fa-upload mr-2"></i>TUO
+      <i class="fa fa-upload mr-2"></i>HAE
   </button>
   <div class="dropdown-menu dropdown-menu-right">
     <a id="polar" href="{% url 'accesslink_recovery' %}" class="dropdown-item">Polar</a>
@@ -95,11 +95,10 @@ let rechargeHrv = {{ recharge_hrv_json|safe }}
 
 
 // Datepickers
-var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
 $('#startdate').datepicker({
     uiLibrary: 'bootstrap4',
     calendarWeeks: true,
-    format: 'yyyy-mm-dd',
+    format: 'dd.mm.yyyy',
     header: true,
     iconsLibrary: 'fontawesome',
     showOtherMonths: true,
@@ -115,7 +114,7 @@ $('#startdate').datepicker({
 $('#enddate').datepicker({
     uiLibrary: 'bootstrap4',
     calendarWeeks: true,
-    format: 'yyyy-mm-dd',
+    format: 'dd.mm.yyyy',
     header: true,
     iconsLibrary: 'fontawesome',
     showOtherMonths: true,
@@ -153,8 +152,10 @@ $("#enddate").change(function(event){
 
 
 function filterByDateRange(data){
+  let start = stringToDate(startDate)
+  let end = stringToDate(endDate)
   filteredData = data.filter((d) => {
-    return d.category >= Date.parse(startDate) && d.category <= Date.parse(endDate)
+    return new Date(d.category) >= start && new Date(d.category) <= end
   })
   return filteredData
 }

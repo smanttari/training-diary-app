@@ -20,6 +20,13 @@ function timeStringToDecimal(time){
 }
 
 
+// Convert string in format "dd.mm.yyyy" to date
+function stringToDate(datestr){
+    let items = datestr.split('.')
+    return new Date(items[2],items[1]-1,items[0])
+}
+
+
 // Convert duration given in hours and minutes to string "hh:mm". 
 function durationToString(h,mins){
     let hours = h || 0
