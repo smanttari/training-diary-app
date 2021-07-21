@@ -15,15 +15,12 @@
 
 <div class="container mb-5 mt-3">
 
-  <div class="jumbotron bg-light pt-4 pb-4">
+  <div class="jumbotron bg-light pt-4 pb-4 border">
     <h1 class="display-4">Hei, {% if user.first_name %}{{ user.first_name}}{% else %}{{ user.username }}{% endif %}!</h1>
     <p class="lead">Tänään on {{current_day}}</p>
-
-    <hr class="mt-5 mb-4">
-
-    <p class="lead mb-4">Yhteenveto harjoitusvuodestasi tähän asti</p>  
-    <div class="card-deck pb-3">
-      <div class="card shadow-sm border-0 bg-white rounded">
+    
+    <div class="card-deck pt-4 pb-3">
+      <div class="card shadow-sm bg-white rounded">
         <div class="card-body pr-5 pl-5 text-center">
           <h6 class="card-title mb-1">Treenit kuluvana vuonna</h6>
           <ul class="list-inline mb-1">
@@ -43,7 +40,7 @@
           </p>
         </div>
       </div>
-      <div class="card shadow-sm border-0 bg-white rounded">
+      <div class="card shadow-sm bg-white rounded">
         <div class="card-body pr-5 pl-5 text-center">
           <h6 class="card-title mb-1">Viikoittainen treenimäärä</h6>
           <ul class="list-inline mb-1">
@@ -63,7 +60,7 @@
           </p>
         </div>
       </div>
-      <div class="card shadow-sm border-0 bg-white rounded">
+      <div class="card shadow-sm bg-white rounded">
         <div class="card-body pr-5 pl-5 text-center">
           <h6 class="card-title mb-1">Treenifiilis keskimäärin</h6>
           <ul class="list-inline mb-1">
@@ -87,18 +84,9 @@
 
     <hr class="mt-5 mb-4">
 
-    <p class="lead mb-4">Toiminnallisuudet</p>
-    <div class="card-deck pb-4">
-      <div class="card shadow-sm border-0 bg-white rounded pb-5">
-        <div class="card-body p-4 pt-5 text-center">
-          <a id="settings_icon" href="{% url 'settings' %}">
-            <i class="fas fa-cog fa-5x"></i>
-          </a>
-          <h5 class="card-title mt-3">Asetukset</h5>
-          <p class="card-text text-muted">Määrittele lajit ja harjoituskaudet. Aseta yksilölliset tehoalueesi.</p>
-        </div>
-      </div>
-      <div class="card shadow-sm border-0 bg-white rounded">
+    <p class="lead mb-4">Toiminnot</p>
+    <div class="card-deck pb-5">
+      <div class="card shadow-sm bg-white rounded pb-4 pr-5 pl-5 mr-4">
         <div class="card-body p-4 pt-5 text-center">
           <a id="calendar_icon" href="{% url 'trainings' %}">
             <i class="far fa-calendar-alt fa-5x"></i>
@@ -107,7 +95,7 @@
           <p class="card-text text-muted">Tarkastele harjoitteluhistoriaasi. Muokkaa tai lisää uusia harjoituksia.</p>
         </div>
       </div>
-      <div class="card shadow-sm border-0 bg-white rounded">
+      <div class="card shadow-sm bg-white rounded pb-4 pr-5 pl-5">
         <div class="card-body p-4 pt-5 text-center">
           <a id="chart_icon" href="{% url 'reports_amounts' %}">
             <i class="fas fa-chart-line fa-5x"></i>
@@ -116,13 +104,24 @@
           <p class="card-text text-muted">Seuraa harjoitusmäärien ja laadun kehitystä. Huomaa edistyksesi.</p>
         </div>
       </div>
-      <div class="card shadow-sm border-0 bg-white rounded pb-5">
+    </div>
+    <div class="card-deck pb-4">
+      <div class="card shadow-sm bg-white rounded pb-4 pr-5 pl-5 mr-4">
         <div class="card-body p-4 pt-5 text-center">
           <a id="settings_icon" href="{% url 'recovery' %}">
             <i class="fas fa-procedures fa-5x"></i>
           </a>
           <h5 class="card-title mt-3">Palautuminen</h5>
           <p class="card-text text-muted">Seuraa palautumistasi. Pidä treenit ja lepo tasapainossa.</p>
+        </div>
+      </div>
+      <div class="card shadow-sm bg-white rounded pb-4 pr-5 pl-5">
+        <div class="card-body p-4 pt-5 text-center">
+          <a id="settings_icon" href="{% url 'settings' %}">
+            <i class="fas fa-cog fa-5x"></i>
+          </a>
+          <h5 class="card-title mt-3">Asetukset</h5>
+          <p class="card-text text-muted">Määrittele lajit ja harjoituskaudet. Aseta yksilölliset tehoalueesi.</p>
         </div>
       </div>
     </div>
