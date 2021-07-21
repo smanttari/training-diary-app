@@ -1,6 +1,7 @@
 {% extends "base_generic.html" %}
 {% block title %}Treenipäiväkirja | Harjoitukset{% endblock %}
 {% load l10n %}
+{% load static %}
 
 {% block head %}
 
@@ -20,10 +21,10 @@
         </div>
         <div class="dropdown">
             <button class="btn btn-sm btn-primary dropdown-toggle mr-2" type="button" id="import" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-upload mr-2"></i>TUO
+                <i class="fa fa-upload mr-2"></i>HAE
             </button>
             <div class="dropdown-menu">
-                <button id="polar" name="polar" class="dropdown-item" type="submit" form="filter_form">POLAR</a>
+                <button id="polar" name="polar" class="dropdown-item" type="submit" form="filter_form"><img src="{% static 'treenipaivakirja/images/polar.svg' %}" class="img-fluid" alt="Polar"></a>
             </div>
         </div>
         <div>
@@ -110,7 +111,6 @@ document.getElementById("nav_trainings").classList.add('active')
 
 
 // Datepickers
-var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 $('#startdate').datepicker({
     uiLibrary: 'bootstrap4',
     calendarWeeks: true,
@@ -163,11 +163,9 @@ var filterBySport = function (settings, data, dataIndex){
 var filterByDateRange = function (settings, data, dataIndex){
     try {
         var col = data[2].substring(0,11).split('-')
-        var dateCol = new Date(col[0], col[1] - 1, col[2],0,0,0,0)
-        var start = $('#startdate').val().split('.')
-        var startdate = new Date(start[2], start[1] - 1, start[0],0,0,0,0)
-        var end = $('#enddate').val().split('.')
-        var enddate = new Date(end[2], end[1] - 1, end[0],0,0,0,0)
+        var dateCol = new Date(col[0], col[1] - 1, col[2])
+        var startdate = stringToDate($('#startdate').val())
+        var enddate = stringToDate($('#enddate').val())
         if (dateCol >= startdate & dateCol <= enddate){
             return true
         }
