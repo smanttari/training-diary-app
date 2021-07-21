@@ -8,7 +8,7 @@ pip install -r requirements.txt
 ````
 
 Download Chrome Driver and set it to PATH
-https://sites.google.com/a/chromium.org/chromedriver/home
+https://sites.google.com/chromium.org/driver/
 
 ## Running tests
 
