@@ -501,6 +501,7 @@ function drawComboChart(div,dataset,opt){
     }
 
     function addTooltips(serie){
+        let formatDate = d3.timeFormat(xaxis.format) 
         if (types[serie] == 'bar'){
             var elements = svg.selectAll('.bars_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_')).selectAll('rect')	
         }
@@ -509,8 +510,11 @@ function drawComboChart(div,dataset,opt){
         }
         elements.attr('data-toggle','tooltip')
             .attr('data-placement','top')
-            .attr('title', d => (tooltip.prefix || '') + (seriesHeaders ? serie + ': ' : '') + d.series[serie] + (tooltip.suffix || ''))
-
+            .attr('data-html','true')
+            .attr('title', d => '<b>' + (xaxis.date ? formatDate(d.category) : d.category) + '</b></br>' + 
+                (tooltip.prefix || '') +
+                (seriesHeaders ? serie + ': ' : '') + d.series[serie] + 
+                (tooltip.suffix || ''))
         }
 
 
