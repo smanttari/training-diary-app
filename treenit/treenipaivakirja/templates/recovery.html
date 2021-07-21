@@ -47,13 +47,14 @@
           </ul>
       </h6>
       <div class="card-body">
+        <p class="text-right text-primary m-0"><i id="sleep_tooltip" class="fas fa-info-circle" data-toggle="tooltip" data-placement="left"></i></p>
         <div id="chart_sleep"></div>
       </div>
     </div>
   </div>
   <div class="col-lg-6 mb-3">
     <div class="card">
-      <h6 class="card-header text-muted">Leposyke
+      <h6 class="card-header text-muted">Syke
         <ul class="nav nav-tabs card-header-tabs float-right" role="tablist" id="nav_recharge">
           <li class="nav-item">
             <a class="nav-link active" href="#" data-toggle="tab" id="recharge_hr">Keskisyke</a>
@@ -64,6 +65,7 @@
         </ul>
       </h6>
       <div class="card-body">
+        <p class="text-right text-primary m-0"><i id="recharge_tooltip" class="fas fa-info-circle" data-toggle="tooltip" data-placement="left"></i></p>
         <div id="chart_recharge"></div>
       </div>
     </div>
@@ -128,8 +130,8 @@ $('#enddate').datepicker({
 })
 
 
-drawSleepDuration()
-drawRechargeHr()
+drawSleep()
+drawRecharge()
 
 
 // click events
@@ -144,10 +146,24 @@ $("#startdate").change(function(event){
   drawRecharge()
 })
 
+$("#startdate").keydown(function(event){
+  if (event.which == 13){
+      $(this).blur()
+      return false
+  }   
+})
+
 $("#enddate").change(function(event){
   endDate = $('#enddate').val()
   drawSleep()
   drawRecharge()
+})
+
+$("#enddate").keydown(function(event){
+  if (event.which == 13){
+      $(this).blur()
+      return false
+  }   
 })
 
 
@@ -184,6 +200,7 @@ function drawRecharge(){
 
 
 function drawSleepDuration(){
+  $('#sleep_tooltip').attr('data-original-title','Unen määrä tunneissa')
   let div = 'chart_sleep'
   let data = filterByDateRange(sleepDuration)
   let options = {
@@ -206,6 +223,7 @@ function drawSleepDuration(){
 
 
 function drawSleepScore(){
+  $('#sleep_tooltip').attr('data-original-title','Unipisteet asteikolla 1 - 100')
   let div = 'chart_sleep'
   let data = filterByDateRange(sleepScore)
   let options = {
@@ -228,6 +246,7 @@ function drawSleepScore(){
 
 
 function drawRechargeHr(){
+  $('#recharge_tooltip').attr('data-original-title','Keskisyke unen ensimmäisen neljän tunnin ajalta')
   let div = 'chart_recharge'
   let data = filterByDateRange(rechargeHr)
   let options = {
@@ -250,6 +269,7 @@ function drawRechargeHr(){
 
 
 function drawRechargeHrv(){
+  $('#recharge_tooltip').attr('data-original-title','Keskimääräinen sykevälivaihtelu unen neljän ensimmäisen tunnin ajalta')
   let div = 'chart_recharge'
   let data = filterByDateRange(rechargeHrv)
   let options = {
