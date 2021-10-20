@@ -1,6 +1,8 @@
 # Training App #
 
-Web application for recording and analyzing trainings. App has direct interface to Polar: training and recovery data can be fetched through [Polar Accesslink API](https://www.polar.com/en/accesslink).
+Web application for recording and analyzing trainings. 
+
+App has interfaces to [Polar](https://www.polar.com/en/accesslink) and [Oura](https://cloud.ouraring.com/docs/) data.
 
 ## Features ##
 
@@ -23,7 +25,7 @@ Web application for recording and analyzing trainings. App has direct interface 
 
 ### Follow your recovery
 
-* Fetch sleep data from Polar
+* Fetch sleep data from Polar or Oura
 * Analyse it with recovery dashboard
 
 ![recovery](./img/recovery.png)
@@ -36,7 +38,7 @@ Web application for recording and analyzing trainings. App has direct interface 
 
 ## Setting up the development environment ##
 
-* Install Python 3.6+
+* Install Python >= 3.6
 
 * Clone repository
 
@@ -58,12 +60,18 @@ python .\treenit\manage.py migrate
 python .\treenit\manage.py loaddata aika.json
 ````
 
-* Set following environment variables (*Accesslink key is needed for interacting with Polar Accesslink API*)
+* Set following environment variables 
 ````
 DEBUG = True
 SECRET_KEY = your_secret_key
-ACCESSLINK_CLIENT_KEY =
-ACCESSLINK_CLIENT_SECRET =
+````
+
+* If you wish to interact with Polar and Oura APIs set also following environment variables
+````
+ACCESSLINK_CLIENT_KEY
+ACCESSLINK_CLIENT_SECRET
+OURA_CLIENT_KEY
+OURA_CLIENT_SECRET
 ````
 
 * Start app by running following command

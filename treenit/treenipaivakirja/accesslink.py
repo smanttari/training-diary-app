@@ -1,12 +1,23 @@
 import re
 import requests
 from datetime import datetime
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib import messages
 
-from treenipaivakirja.models import PolarUser, PolarSport, PolarSleep, PolarRecharge
+from treenipaivakirja.models import PolarSport, PolarSleep, PolarRecharge
 
+
+def build_auth_url():
+    params = {
+        'response_type': 'code', 
+        'state': 'recovery',
+        'client_id': settings.ACCESSLINK_CLIENT_KEY
+        }
+    auth_url = f'{settings.ACCESSLINK_AUTH_URL}?{urlencode(params)}'
+    return auth_url
+    
 
 def get_access_token(auth_code):
     headers = {

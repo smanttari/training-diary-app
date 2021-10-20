@@ -183,3 +183,14 @@ try:
 except KeyError:
     ACCESSLINK_CLIENT_KEY = None
     ACCESSLINK_CLIENT_SECRET = None
+
+# Oura
+OURA_URL = 'https://api.ouraring.com/v1'
+OURA_AUTH_URL = 'https://cloud.ouraring.com/oauth/authorize'
+OURA_ACCESS_TOKEN_URL = 'https://api.ouraring.com/oauth/token'
+try:
+    OURA_CLIENT_KEY = os.environ['OURA_CLIENT_KEY']
+    OURA_CLIENT_SECRET = os.environ['OURA_CLIENT_SECRET']
+except KeyError:
+    OURA_CLIENT_KEY = None
+    OURA_CLIENT_SECRET = None

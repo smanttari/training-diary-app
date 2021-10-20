@@ -4,7 +4,7 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 
-from treenipaivakirja.models import Harjoitus, Aika, Laji, Teho, Tehoalue, Kausi, PolarSleep, PolarRecharge
+from treenipaivakirja.models import Harjoitus, Aika, Laji, Teho, Tehoalue, Kausi, PolarSleep, PolarRecharge, OuraSleep
 from treenipaivakirja.utils import duration_to_string, dataframe_to_dict,coalesce
 from treenipaivakirja.calculations import first_training_date
 from django.db.models import Min
@@ -280,7 +280,7 @@ def seasons_to_list(user_id):
     return list(seasons)
 
 
-def sleep_to_df(user_id):
+def polar_sleep_to_df(user_id):
     sleep = PolarSleep.objects.filter(polar_user_id__user=user_id).values_list(
         'date','duration','sleep_score').order_by('date')
     sleep_df = pd.DataFrame(sleep, columns = ['date','duration','score'])
@@ -298,21 +298,27 @@ def sleep_score_to_json(sleep_df):
     return score.to_json(orient='records')
 
 
-def recharge_to_df(user_id):
+def polar_recharge_to_df(user_id):
     recharge = PolarRecharge.objects.filter(polar_user_id__user=user_id).values_list(
         'date','heart_rate_avg','heart_rate_variability_avg').order_by('date')
-    recharge_df = pd.DataFrame(recharge, columns=['date','heart_rate_avg','heart_rate_variability_avg'])
+    recharge_df = pd.DataFrame(recharge, columns=['date','hr_avg','hrv_avg'])
     recharge_df['date'] = recharge_df['date'].astype(str)
     return recharge_df
 
 
 def recharge_hr_to_json(recharge_df):
-    hr = recharge_df[['date','heart_rate_avg']].rename(
-        columns={'date':'category', 'heart_rate_avg':'series'})
+    hr = recharge_df[['date','hr_avg']].rename(columns={'date':'category', 'hr_avg':'series'})
     return hr.to_json(orient='records')
 
 
 def recharge_hrv_to_json(recharge_df):
-    hrv = recharge_df[['date','heart_rate_variability_avg']].rename(
-        columns={'date':'category', 'heart_rate_variability_avg':'series'})
+    hrv = recharge_df[['date','hrv_avg']].rename(columns={'date':'category', 'hrv_avg':'series'})
     return hrv.to_json(orient='records')
+
+
+def oura_sleep_to_df(user_id):
+    sleep = OuraSleep.objects.filter(user=user_id).values_list(
+        'date','total','score','hr_avg','hrv_avg').order_by('date')
+    sleep_df = pd.DataFrame(sleep, columns = ['date','duration','score','hr_avg','hrv_avg'])
+    sleep_df['date'] = sleep_df['date'].astype(str)
+    return sleep_df

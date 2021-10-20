@@ -10,63 +10,103 @@
   </button>
   <div class="dropdown-menu dropdown-menu-right">
     <a id="polar" href="{% url 'accesslink_recovery' %}" class="dropdown-item">Polar</a>
+    <a id="oura" href="{% url 'oura_recovery' %}" class="dropdown-item">Oura</a>
   </div>
 </div>
 {% endblock %}
 
 {% block content %}
 
-<div class="row mb-3">
-  <div class="col">
-    <div class="float-left">
-      <form class="form-inline">
-        <div class="form-group ml-1 mr-1">
-          <label class="text-muted mr-2">Aikaväli:</label>
-          <input class="form-control ml-2" id="startdate" pattern="\d{4}-d{1,2}-\d{1,2}" placeholder="yyyy-mm-dd" required/>
-        </div>
-        <div class="form-group ml-3 mr-1">
-          <label class="text-muted mr-2">-</label>
-          <input class="form-control ml-2" id="enddate" pattern="\d{4}-\d{1,2}-\d{1,2}" placeholder="yyyy-mm-dd" required/>
-        </div>
-      </form>
+<div class="bg-light border p-3 mb-3">
+  <form class="form-inline">
+    <div class="form-group ml-1 mr-1">
+      <label class="text-muted mr-2">Aikaväli:</label>
+      <input class="form-control ml-2" id="startdate" pattern="\d{4}-d{1,2}-\d{1,2}" placeholder="yyyy-mm-dd" required/>
     </div>
-  </div>
+    <div class="form-group ml-3 mr-1">
+      <label class="text-muted mr-2">-</label>
+      <input class="form-control ml-2" id="enddate" pattern="\d{4}-\d{1,2}-\d{1,2}" placeholder="yyyy-mm-dd" required/>
+    </div>
+  </form>
 </div>
+
+<h3 class="text-uppercase text-dark mb-3"><small class="text-muted">Polar</small></h3>
 
 <div class="row">
   <div class="col-lg-6 mb-3">
     <div class="card">
       <h6 class="card-header text-muted">Uni
-          <ul class="nav nav-tabs card-header-tabs float-right" role="tablist" id="nav_sleep">
+          <ul class="nav nav-tabs card-header-tabs float-right" role="tablist" id="nav_sleep_polar">
             <li class="nav-item">
-              <a class="nav-link active" href="#" data-toggle="tab" id="sleep_duration">Kesto</a>
+              <a class="nav-link active" href="#" data-toggle="tab" id="sleep_duration_polar">Kesto</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" data-toggle="tab" id="sleep_score">Laatu</a>
+              <a class="nav-link" href="#" data-toggle="tab" id="sleep_score_polar">Laatu</a>
             </li>
           </ul>
       </h6>
       <div class="card-body">
-        <p class="text-right text-primary m-0"><i id="sleep_tooltip" class="fas fa-info-circle" data-toggle="tooltip" data-placement="left"></i></p>
-        <div id="chart_sleep"></div>
+        <p class="text-right text-primary m-0"><i id="tooltip_sleep_polar" class="fas fa-info-circle" data-toggle="tooltip" data-placement="left"></i></p>
+        <div id="chart_sleep_polar"></div>
       </div>
     </div>
   </div>
   <div class="col-lg-6 mb-3">
     <div class="card">
       <h6 class="card-header text-muted">Syke
-        <ul class="nav nav-tabs card-header-tabs float-right" role="tablist" id="nav_recharge">
+        <ul class="nav nav-tabs card-header-tabs float-right" role="tablist" id="nav_recharge_polar">
           <li class="nav-item">
-            <a class="nav-link active" href="#" data-toggle="tab" id="recharge_hr">Keskisyke</a>
+            <a class="nav-link active" href="#" data-toggle="tab" id="recharge_hr_polar">Keskisyke</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="tab" id="recharge_hrv">Sykevälivaihtelu</a>
+            <a class="nav-link" href="#" data-toggle="tab" id="recharge_hrv_polar">Sykevälivaihtelu</a>
           </li>
         </ul>
       </h6>
       <div class="card-body">
-        <p class="text-right text-primary m-0"><i id="recharge_tooltip" class="fas fa-info-circle" data-toggle="tooltip" data-placement="left"></i></p>
-        <div id="chart_recharge"></div>
+        <p class="text-right text-primary m-0"><i id="tooltip_recharge_polar" class="fas fa-info-circle" data-toggle="tooltip" data-placement="left"></i></p>
+        <div id="chart_recharge_polar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 class="text-uppercase text-dark mb-3"><small class="text-muted">Oura</small></h3>
+
+<div class="row">
+  <div class="col-lg-6 mb-3">
+    <div class="card">
+      <h6 class="card-header text-muted">Uni
+          <ul class="nav nav-tabs card-header-tabs float-right" role="tablist" id="nav_sleep_oura">
+            <li class="nav-item">
+              <a class="nav-link active" href="#" data-toggle="tab" id="sleep_duration_oura">Kesto</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-toggle="tab" id="sleep_score_oura">Laatu</a>
+            </li>
+          </ul>
+      </h6>
+      <div class="card-body">
+        <p class="text-right text-primary m-0"><i id="tooltip_sleep_oura" class="fas fa-info-circle" data-toggle="tooltip" data-placement="left"></i></p>
+        <div id="chart_sleep_oura"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 mb-3">
+    <div class="card">
+      <h6 class="card-header text-muted">Syke
+        <ul class="nav nav-tabs card-header-tabs float-right" role="tablist" id="nav_recharge_oura">
+          <li class="nav-item">
+            <a class="nav-link active" href="#" data-toggle="tab" id="recharge_hr_oura">Keskisyke</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-toggle="tab" id="recharge_hrv_oura">Sykevälivaihtelu</a>
+          </li>
+        </ul>
+      </h6>
+      <div class="card-body">
+        <p class="text-right text-primary m-0"><i id="tooltip_recharge_oura" class="fas fa-info-circle" data-toggle="tooltip" data-placement="left"></i></p>
+        <div id="chart_recharge_oura"></div>
       </div>
     </div>
   </div>
@@ -90,10 +130,14 @@ $(function () {$('[data-toggle="tooltip"]').tooltip()})
 // load data
 let startDate = '{{ start_date }}'
 let endDate = '{{ end_date }}'
-let sleepDuration = {{ sleep_duration_json|safe }}
-let sleepScore = {{ sleep_score_json|safe }}
-let rechargeHr = {{ recharge_hr_json|safe }}
-let rechargeHrv = {{ recharge_hrv_json|safe }}
+let durationPolar = {{ polar_sleep_duration_json|safe }}
+let scorePolar = {{ polar_sleep_score_json|safe }}
+let hrPolar = {{ polar_recharge_hr_json|safe }}
+let hrvPolar = {{ polar_recharge_hrv_json|safe }}
+let durationOura = {{ oura_sleep_duration_json|safe }}
+let scoreOura = {{ oura_sleep_score_json|safe }}
+let hrOura = {{ oura_recharge_hr_json|safe }}
+let hrvOura = {{ oura_recharge_hrv_json|safe }}
 
 
 // Datepickers
@@ -130,33 +174,113 @@ $('#enddate').datepicker({
 })
 
 
-drawSleep()
-drawRecharge()
+//chart options
+let optionsDuration = {
+  type:'line',
+  width: 800,
+  height: 400,
+  margin: {top: 40, bottom: 60, left: 60, right: 60},
+  xaxis: {font: {size: 11}, orientation: 'skew', ticksCount:10, format:'%d.%m.%Y', date:true},
+  yaxis: {font: {size: 11}},
+  ylabel: {label: 'Kesto (h)', size: 12},
+  colors: ['#536be2'],
+  grid: true,
+  tooltip: {suffix:" h"},
+  line: {labels:false},
+  movingAvg: {windowSize:7, color: '#fd397a'},
+  responsiveness: true
+  }
+
+let optionsScore = {
+  type:'line',
+  width: 800,
+  height: 400,
+  margin: {top: 40, bottom: 60, left: 60, right: 60},
+  xaxis: {font: {size: 11}, orientation: 'skew', ticksCount:10, format:'%d.%m.%Y', date:true},
+  yaxis: {font: {size: 11}},
+  ylabel: {label: 'Score (1-100)', size: 12},
+  colors: ['#536be2'],
+  grid: true,
+  tooltip: true,
+  line: {labels:false},
+  movingAvg: {windowSize:7, color: '#fd397a'},
+  responsiveness: true
+  }
+
+let optionsHr = {
+  type:'line',
+  width: 800,
+  height: 400,
+  margin: {top: 40, bottom: 60, left: 70, right: 60},
+  xaxis: {font: {size: 11}, orientation: 'skew', ticksCount:10 , format:'%d.%m.%Y', date:true},
+  yaxis: {font: {size: 11}},
+  ylabel: {label: 'Keskisyke', size: 12},
+  colors: ['#536be2'],
+  grid: true,
+  tooltip: {prefix:"HR: "},
+  line: {labels:false},
+  movingAvg: {windowSize:7, color: '#fd397a'},
+  responsiveness: true
+  }
+
+let optionsHrv = {
+  type:'line',
+  width: 800,
+  height: 400,
+  margin: {top: 40, bottom: 60, left: 70, right: 60},
+  xaxis: {font: {size: 11}, orientation: 'skew', ticksCount:10 , format:'%d.%m.%Y', date:true},
+  yaxis: {font: {size: 11}},
+  ylabel: {label: 'Sykevälivaihtelu', size: 12},
+  colors: ['#536be2'],
+  grid: true,
+  tooltip: {prefix:"HRV: "},
+  line: {labels:false},
+  movingAvg: {windowSize:7, color: '#fd397a'},
+  responsiveness: true
+  }
+
+
+//chart tooltips
+let tooltipDurationPolar = 'Unen määrä tunneissa'
+let tooltipScorePolar = 'Unipisteet asteikolla 1 - 100'
+let tooltipHrPolar = 'Keskimääräinen syke unen ensimmäisen neljän tunnin ajalta'
+let tooltipHrvPolar = 'Keskimääräinen sykevälivaihtelu unen neljän ensimmäisen tunnin ajalta'
+let tooltipDurationOura = 'Unen määrä tunneissa'
+let tooltipScoreOura = 'Unipisteet asteikolla 1 - 100'
+let tooltipHrOura = 'Keskimääräinen syke unen aikana'
+let tooltipHrvOura = 'Keskimääräinen sykevälivaihtelu unen aikana'
+
+
+// draw charts
+drawActiveCharts()
 
 
 // click events
-$('#sleep_duration').click(function() {drawSleepDuration()})
-$('#sleep_score').click(function() {drawSleepScore()})
-$('#recharge_hr').click(function() {drawRechargeHr()})
-$('#recharge_hrv').click(function() {drawRechargeHrv()})
+$('#sleep_duration_polar').click(function() {drawSleepDurationPolar()})
+$('#sleep_score_polar').click(function() {drawSleepScorePolar()})
+$('#recharge_hr_polar').click(function() {drawRechargeHrPolar()})
+$('#recharge_hrv_polar').click(function() {drawRechargeHrvPolar()})
+
+$('#sleep_duration_oura').click(function() {drawSleepDurationOura()})
+$('#sleep_score_oura').click(function() {drawSleepScoreOura()})
+$('#recharge_hr_oura').click(function() {drawRechargeHrOura()})
+$('#recharge_hrv_oura').click(function() {drawRechargeHrvOura()})
 
 $("#startdate").change(function(event){
   startDate = $('#startdate').val()
-  drawSleep()
-  drawRecharge()
+  drawActiveCharts()
 })
 
 $("#startdate").keydown(function(event){
   if (event.which == 13){
       $(this).blur()
       return false
-  }   
+    }   
 })
 
 $("#enddate").change(function(event){
   endDate = $('#enddate').val()
-  drawSleep()
-  drawRecharge()
+  drawActiveCharts()
 })
 
 $("#enddate").keydown(function(event){
@@ -165,6 +289,16 @@ $("#enddate").keydown(function(event){
       return false
   }   
 })
+
+
+function updateTooltip(div, text){
+  $('#' + div).attr('data-original-title', text)
+}
+
+
+function getActivatedNav(id){
+  return document.getElementById(id).getElementsByClassName("nav-link active")[0].id
+}
 
 
 function filterByDateRange(data){
@@ -177,117 +311,120 @@ function filterByDateRange(data){
 }
 
 
-function drawSleep(){
-  let measure = document.getElementById("nav_sleep").getElementsByClassName("nav-link active")[0].id
-  if (measure == 'sleep_duration'){
-    drawSleepDuration()
-  }
-  else if (measure == 'sleep_score'){
-    drawSleepScore()
-  }
+function drawChart(chartDiv, chartData, chartOptions, tooltipDiv, tooltipText){
+  data=filterByDateRange(chartData)
+  drawComboChart(div=chartDiv, data=data, options=chartOptions)
+  updateTooltip(div=tooltipDiv, text=tooltipText)
 }
 
 
-function drawRecharge(){
-  let measure = document.getElementById("nav_recharge").getElementsByClassName("nav-link active")[0].id
-  if (measure == 'recharge_hr'){
-    drawRechargeHr()
-  }
-  else if (measure == 'recharge_hrv'){
-    drawRechargeHrv()
-  }
+function drawSleepDurationPolar(){
+  drawChart(
+    chartDiv='chart_sleep_polar', 
+    chartData=durationPolar, 
+    chartOptions=optionsDuration, 
+    tooltipDiv='tooltip_sleep_polar', 
+    tooltipText=tooltipDurationPolar
+    )
 }
 
 
-function drawSleepDuration(){
-  $('#sleep_tooltip').attr('data-original-title','Unen määrä tunneissa')
-  let div = 'chart_sleep'
-  let data = filterByDateRange(sleepDuration)
-  let options = {
-    type:'line',
-    width: 800,
-    height: 400,
-    margin: {top: 40, bottom: 60, left: 60, right: 60},
-    xaxis: {font: {size: 11}, orientation: 'skew', ticksCount:10, format:'%d.%m.%Y', date:true},
-    yaxis: {font: {size: 11}},
-    ylabel: {label: 'Kesto (h)', size: 12},
-    colors: ['#536be2'],
-    grid: true,
-    tooltip: {suffix:" h"},
-    line: {labels:false},
-    movingAvg: {windowSize:7, color: '#fd397a'},
-    responsiveness: true
-    }
-    drawComboChart(div,data,options)
+function drawSleepScorePolar(){
+  drawChart(
+    chartDiv='chart_sleep_polar', 
+    chartData=scorePolar, 
+    chartOptions=optionsScore, 
+    tooltipDiv='tooltip_sleep_polar', 
+    tooltipText=tooltipScorePolar
+    )
 }
 
 
-function drawSleepScore(){
-  $('#sleep_tooltip').attr('data-original-title','Unipisteet asteikolla 1 - 100')
-  let div = 'chart_sleep'
-  let data = filterByDateRange(sleepScore)
-  let options = {
-    type:'line',
-    width: 800,
-    height: 400,
-    margin: {top: 40, bottom: 60, left: 60, right: 60},
-    xaxis: {font: {size: 11}, orientation: 'skew', ticksCount:10, format:'%d.%m.%Y', date:true},
-    yaxis: {font: {size: 11}},
-    ylabel: {label: 'Score (1-100)', size: 12},
-    colors: ['#536be2'],
-    grid: true,
-    tooltip: true,
-    line: {labels:false},
-    movingAvg: {windowSize:7, color: '#fd397a'},
-    responsiveness: true
-    }
-    drawComboChart(div,data,options)
+function drawRechargeHrPolar(){
+  drawChart(
+    chartDiv='chart_recharge_polar', 
+    chartData=hrPolar, 
+    chartOptions=optionsHr, 
+    tooltipDiv='tooltip_recharge_polar', 
+    tooltipText=tooltipHrPolar
+    )
 }
 
 
-function drawRechargeHr(){
-  $('#recharge_tooltip').attr('data-original-title','Keskisyke unen ensimmäisen neljän tunnin ajalta')
-  let div = 'chart_recharge'
-  let data = filterByDateRange(rechargeHr)
-  let options = {
-    type:'line',
-    width: 800,
-    height: 400,
-    margin: {top: 40, bottom: 60, left: 70, right: 60},
-    xaxis: {font: {size: 11}, orientation: 'skew', ticksCount:10 , format:'%d.%m.%Y', date:true},
-    yaxis: {font: {size: 11}},
-    ylabel: {label: 'Keskisyke', size: 12},
-    colors: ['#536be2'],
-    grid: true,
-    tooltip: {prefix:"HR: "},
-    line: {labels:false},
-    movingAvg: {windowSize:7, color: '#fd397a'},
-    responsiveness: true
-    }
-    drawComboChart(div,data,options)
+function drawRechargeHrvPolar(){
+  drawChart(
+    chartDiv='chart_recharge_polar', 
+    chartData=hrvPolar, 
+    chartOptions=optionsHrv, 
+    tooltipDiv='tooltip_recharge_polar', 
+    tooltipText=tooltipHrvPolar
+    ) 
 }
 
 
-function drawRechargeHrv(){
-  $('#recharge_tooltip').attr('data-original-title','Keskimääräinen sykevälivaihtelu unen neljän ensimmäisen tunnin ajalta')
-  let div = 'chart_recharge'
-  let data = filterByDateRange(rechargeHrv)
-  let options = {
-    type:'line',
-    width: 800,
-    height: 400,
-    margin: {top: 40, bottom: 60, left: 70, right: 60},
-    xaxis: {font: {size: 11}, orientation: 'skew', ticksCount:10 , format:'%d.%m.%Y', date:true},
-    yaxis: {font: {size: 11}},
-    ylabel: {label: 'Sykevälivaihtelu', size: 12},
-    colors: ['#536be2'],
-    grid: true,
-    tooltip: {prefix:"HRV: "},
-    line: {labels:false},
-    movingAvg: {windowSize:7, color: '#fd397a'},
-    responsiveness: true
-    }
-    drawComboChart(div,data,options)
+function drawSleepDurationOura(){
+  drawChart(
+    chartDiv='chart_sleep_oura', 
+    chartData=durationOura, 
+    chartOptions=optionsDuration, 
+    tooltipDiv='tooltip_sleep_oura', 
+    tooltipText=tooltipDurationOura
+    )
+}
+
+
+function drawSleepScoreOura(){
+  drawChart(
+    chartDiv='chart_sleep_oura', 
+    chartData=scoreOura, 
+    chartOptions=optionsScore, 
+    tooltipDiv='tooltip_sleep_oura', 
+    tooltipText=tooltipScoreOura
+    )
+}
+
+
+function drawRechargeHrOura(){
+  drawChart(
+    chartDiv='chart_recharge_oura', 
+    chartData=hrOura, 
+    chartOptions=optionsHr, 
+    tooltipDiv='tooltip_recharge_oura', 
+    tooltipText=tooltipHrOura
+    )
+}
+
+
+function drawRechargeHrvOura(){
+  drawChart(
+    chartDiv='chart_recharge_oura', 
+    chartData=hrvOura, 
+    chartOptions=optionsHrv, 
+    tooltipDiv='tooltip_recharge_oura', 
+    tooltipText=tooltipHrvOura
+    ) 
+}
+
+
+function drawActiveCharts(){
+
+  let nav1 = getActivatedNav('nav_sleep_polar')
+  let nav2 = getActivatedNav('nav_recharge_polar')
+  let nav3 = getActivatedNav('nav_sleep_oura')
+  let nav4 = getActivatedNav('nav_recharge_oura')
+
+  if (nav1 == 'sleep_duration_polar'){drawSleepDurationPolar()}
+  else if (nav1 == 'sleep_score_polar'){drawSleepScorePolar()}
+  
+  if (nav2 == 'recharge_hr_polar'){drawRechargeHrPolar()}
+  else if (nav2 == 'recharge_hrv_polar'){drawRechargeHrvPolar()}
+
+  if (nav3 == 'sleep_duration_oura'){drawSleepDurationOura()}
+  else if (nav3 == 'sleep_score_oura'){drawSleepScoreOura()}
+
+  if (nav4 == 'recharge_hr_oura'){drawRechargeHrOura()}
+  else if (nav4 == 'recharge_hrv_oura'){drawRechargeHrvOura()}
+
 }
 
 </script>

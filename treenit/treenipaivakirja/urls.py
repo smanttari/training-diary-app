@@ -22,6 +22,8 @@ urlpatterns = [
     path('accesslink_callback', views.accesslink_callback, name='accesslink_callback'),
     path('accesslink_trainings', views.accesslink_trainings, name='accesslink_trainings'),
     path('accesslink_recovery', views.accesslink_recovery, name='accesslink_recovery'),
+    path('oura_callback', views.oura_callback, name='oura_callback'),
+    path('oura_recovery', views.oura_recovery, name='oura_recovery'),
     path('api/trainings', rest_api.trainings),
     path('api/trainings/<int:pk>', rest_api.trainings_by_id),
     path('api/token', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),

@@ -1,10 +1,8 @@
 import json
 import logging
-from datetime import datetime, timedelta, date
-from urllib.parse import urlencode
+from datetime import datetime, timedelta
 
 import pandas as pd
-import numpy as np
 
 from django.shortcuts import render,redirect
 from django.forms import inlineformset_factory, formset_factory
@@ -13,18 +11,19 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Max
 from django.db.models.deletion import ProtectedError
 from django.http import JsonResponse
-from django.conf import settings
 from django.urls import reverse
 from django.views.decorators.debug import sensitive_variables
 
-from treenipaivakirja.models import Harjoitus, Aika, Laji, Teho, Tehoalue, Kausi, PolarUser, PolarSport, PolarSleep, PolarRecharge
+from treenipaivakirja.models import Harjoitus, Laji, Teho, Tehoalue, Kausi, PolarUser, PolarSport, PolarSleep, PolarRecharge, OuraUser, OuraSleep
 from treenipaivakirja.forms import HarjoitusForm, LajiForm, TehoForm, TehoalueForm, UserForm, RegistrationForm, KausiForm, HarjoitusFormSet
 import treenipaivakirja.utils as utils
 import treenipaivakirja.transformations as tr
 import treenipaivakirja.calculations as cl
 import treenipaivakirja.accesslink as al
+import treenipaivakirja.oura as ou
 
 
 LOGGER_DEBUG = logging.getLogger(__name__)
@@ -404,12 +403,7 @@ def accesslink_trainings(request):
     try:
         polar_user = PolarUser.objects.get(user=request.user.id)
     except:
-        params = {
-            'response_type': 'code', 
-            'state': 'trainings',
-            'client_id': settings.ACCESSLINK_CLIENT_KEY
-            }
-        polar_auth_url = f'{settings.ACCESSLINK_AUTH_URL}?{urlencode(params)}'
+        polar_auth_url = al.build_auth_url()
         return redirect(polar_auth_url)
 
     required_fields = utils.get_required_fields(Harjoitus)
@@ -461,12 +455,7 @@ def accesslink_recovery(request):
         polar_user = PolarUser.objects.get(user=request.user.id)
         access_token = polar_user.access_token
     except:
-        params = {
-            'response_type': 'code', 
-            'state': 'recovery',
-            'client_id': settings.ACCESSLINK_CLIENT_KEY
-            }
-        polar_auth_url = f'{settings.ACCESSLINK_AUTH_URL}?{urlencode(params)}'
+        polar_auth_url = al.build_auth_url()
         return redirect(polar_auth_url)
     
     sleep = al.list_sleep(access_token)
@@ -486,34 +475,116 @@ def accesslink_recovery(request):
     return redirect('recovery')
 
 
+@sensitive_variables('access_token')
+@login_required
+def oura_recovery(request):
+    """ 
+    Fetch recovery data from Oura
+    """
+    try:
+        oura_user = OuraUser.objects.get(user=request.user.id)
+        access_token = oura_user.access_token
+        refresh_token = oura_user.refresh_token
+    except:
+        oura_auth_url = ou.build_auth_url()
+        return redirect(oura_auth_url)
+
+    user = User.objects.get(id=request.user.id)
+    last_date = OuraSleep.objects.filter(user=user.id).aggregate(Max('date'))['date__max'] 
+    if last_date is None:
+        start_date = None
+    else:
+        start_date = last_date + timedelta(days=1)
+    sleep = ou.sleep_summary(access_token, start_date=start_date)
+
+    if sleep.status_code == 401:    #unauthorized
+        token = ou.refresh_token(refresh_token)
+        if token.status_code != 200:
+            messages.add_message(request, messages.ERROR, ou.error_message(token))
+            return redirect('recovery')
+        else:
+            OuraUser.objects.update(
+                access_token = token.json()['access_token'],
+                refresh_token = token.json()['refresh_token'],
+                user = user)
+            sleep = ou.sleep_summary(token.json()['access_token'], start_date=start_date)
+
+    if sleep.status_code != 200:
+        messages.add_message(request, messages.ERROR, ou.error_message(sleep))
+    else:
+        sleep_objects = ou.parse_sleep_data(user, sleep)
+        OuraSleep.objects.bulk_create(sleep_objects, ignore_conflicts=True)
+        messages.add_message(request, messages.SUCCESS, 'Datan hakeminen onnistui.')
+    return redirect('recovery')
+    
+
+@sensitive_variables('access_token')
+@login_required
+def oura_callback(request):
+    """
+    Authentication to Oura
+    """
+    auth_code = request.GET.get('code')
+    if auth_code is None:
+        error = request.GET.get('error')
+        messages.add_message(request, messages.ERROR, 'Oura Error: {}'.format(error))
+        return redirect('recovery')
+    else:
+        token = ou.get_access_token(auth_code)
+        if token.status_code != 200:
+            messages.add_message(request, messages.ERROR, ou.error_message(token))
+            return redirect('recovery')
+        else:
+            OuraUser.objects.create(
+                access_token = token.json()['access_token'],
+                refresh_token = token.json()['refresh_token'],
+                user = User.objects.get(id=request.user.id))
+    return redirect('oura_recovery')
+
+
 @login_required
 def recovery(request):
     """ 
     Recovery data
     """
     user_id = request.user.id
+    current_day = datetime.now().date()
 
-    sleep_df = tr.sleep_to_df(user_id)
-    if sleep_df.empty:
-        sleep_duration_json = []
-        sleep_score_json = []
-        sleep_end_date = datetime.now().date()
-    else:
-        sleep_duration_json = tr.sleep_duration_to_json(sleep_df)
-        sleep_score_json = tr.sleep_score_to_json(sleep_df)
-        sleep_end_date = datetime.strptime(sleep_df['date'].iloc[-1],'%Y-%m-%d')
+    polar_sleep_duration_json = []
+    polar_sleep_score_json = []
+    polar_sleep_end_date = current_day
+    polar_recharge_hr_json = []
+    polar_recharge_hrv_json = []
+    polar_recharge_end_date = current_day
+    oura_sleep_duration_json = []
+    oura_sleep_score_json = []
+    oura_sleep_end_date = current_day
+    oura_recharge_hr_json = []
+    oura_recharge_hrv_json = []
 
-    recharge_df = tr.recharge_to_df(user_id)
-    if recharge_df.empty:
-        recharge_hr_json = []
-        recharge_hrv_json = []
-        recharge_end_date = datetime.now().date()
-    else:
-        recharge_hr_json = tr.recharge_hr_to_json(recharge_df)
-        recharge_hrv_json = tr.recharge_hrv_to_json(recharge_df)
-        recharge_end_date = datetime.strptime(recharge_df['date'].iloc[-1],'%Y-%m-%d')
+    polar_sleep_df = tr.polar_sleep_to_df(user_id)
+    if not polar_sleep_df.empty:
+        polar_sleep_duration_json = tr.sleep_duration_to_json(polar_sleep_df)
+        polar_sleep_score_json = tr.sleep_score_to_json(polar_sleep_df)
+        polar_sleep_end_date = datetime.strptime(polar_sleep_df['date'].iloc[-1],'%Y-%m-%d')
+
+    polar_recharge_df = tr.polar_recharge_to_df(user_id)
+    if not polar_recharge_df.empty:
+        polar_recharge_hr_json = tr.recharge_hr_to_json(polar_recharge_df)
+        polar_recharge_hrv_json = tr.recharge_hrv_to_json(polar_recharge_df)
+        polar_recharge_end_date = datetime.strptime(polar_recharge_df['date'].iloc[-1],'%Y-%m-%d')
+
+    oura_sleep_df = tr.oura_sleep_to_df(user_id)
+    if not oura_sleep_df.empty:
+        oura_sleep_duration_json = tr.sleep_duration_to_json(oura_sleep_df)
+        oura_sleep_score_json = tr.sleep_score_to_json(oura_sleep_df)
+        oura_sleep_end_date = datetime.strptime(oura_sleep_df['date'].iloc[-1],'%Y-%m-%d')
+        oura_recharge_hr_json = tr.recharge_hr_to_json(oura_sleep_df)
+        oura_recharge_hrv_json = tr.recharge_hrv_to_json(oura_sleep_df)
+
     
-    end_date = max(sleep_end_date, recharge_end_date)
+    end_date = max(polar_sleep_end_date, polar_recharge_end_date, oura_sleep_end_date)
+
     last_month = end_date.month-1 if end_date.month > 1 else 12
     start_date = '01.{}.{}'.format(('0'+str(last_month))[-2:], end_date.year)
     end_date = datetime.strftime(end_date, '%d.%m.%Y')
@@ -522,10 +593,14 @@ def recovery(request):
         context = {
             'start_date': start_date,
             'end_date': end_date,
-            'sleep_duration_json': sleep_duration_json,
-            'sleep_score_json': sleep_score_json,
-            'recharge_hr_json': recharge_hr_json,
-            'recharge_hrv_json': recharge_hrv_json
+            'polar_sleep_duration_json': polar_sleep_duration_json,
+            'polar_sleep_score_json': polar_sleep_score_json,
+            'polar_recharge_hr_json': polar_recharge_hr_json,
+            'polar_recharge_hrv_json': polar_recharge_hrv_json,
+            'oura_sleep_duration_json':oura_sleep_duration_json,
+            'oura_sleep_score_json': oura_sleep_score_json,
+            'oura_recharge_hr_json': oura_recharge_hr_json,
+            'oura_recharge_hrv_json': oura_recharge_hrv_json
         })
 
 

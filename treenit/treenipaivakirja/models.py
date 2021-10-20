@@ -189,3 +189,32 @@ class PolarRecharge(models.Model):
 
     class Meta:
         unique_together = [['polar_user', 'date']]
+
+
+class OuraUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    access_token = encrypt(models.CharField(max_length=500, null=True, blank=True))
+    refresh_token = encrypt(models.CharField(max_length=500, null=True, blank=True))  
+
+    def __str__(self):
+        return str(self.user_id)
+
+
+class OuraSleep(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateField()
+    bedtime_start = models.DateTimeField()
+    bedtime_end = models.DateTimeField()
+    duration = models.DecimalField(max_digits=4, decimal_places=2)
+    total = models.DecimalField(max_digits=4, decimal_places=2)
+    awake = models.DecimalField(max_digits=4, decimal_places=2)
+    rem = models.DecimalField(max_digits=4, decimal_places=2)
+    deep = models.DecimalField(max_digits=4, decimal_places=2)
+    light = models.DecimalField(max_digits=4, decimal_places=2)
+    hr_min = models.IntegerField()
+    hr_avg = models.DecimalField(max_digits=4, decimal_places=2)
+    hrv_avg = models.IntegerField()
+    score = models.IntegerField()
+
+    class Meta:
+        unique_together = [['user', 'date']]
