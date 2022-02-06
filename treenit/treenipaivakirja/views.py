@@ -584,9 +584,7 @@ def recovery(request):
 
     
     end_date = max(polar_sleep_end_date, polar_recharge_end_date, oura_sleep_end_date)
-
-    last_month = end_date.month-1 if end_date.month > 1 else 12
-    start_date = '01.{}.{}'.format(('0'+str(last_month))[-2:], end_date.year)
+    start_date = datetime.strftime(end_date - timedelta(30), '%d.%m.%Y')
     end_date = datetime.strftime(end_date, '%d.%m.%Y')
 
     return render(request, 'recovery.html', 
