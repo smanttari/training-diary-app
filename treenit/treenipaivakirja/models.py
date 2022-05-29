@@ -218,3 +218,35 @@ class OuraSleep(models.Model):
 
     class Meta:
         unique_together = [['user', 'date']]
+
+
+class HarjoitusView(models.Model):
+    id = models.IntegerField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    vuosi = models.IntegerField()
+    kk = models.IntegerField()
+    kk_nimi = models.CharField(max_length=20)
+    vko = models.IntegerField()
+    viikonpaiva = models.CharField(max_length=20)
+    vvvvkkpp = models.IntegerField()
+    pvm = models.DateField()
+    vuorokaudenaika = models.IntegerField()
+    laji = models.CharField(max_length=10)
+    laji_nimi = models.CharField(max_length=50)
+    laji_ryhma = models.CharField(max_length=50)
+    kesto_h = models.IntegerField()
+    kesto_min = models.IntegerField()
+    kesto = models.DecimalField(max_digits=5, decimal_places=2)
+    keskisyke = models.IntegerField()
+    matka = models.DecimalField(max_digits=5, decimal_places=2)
+    vauhti_km_h = models.DecimalField(max_digits=5, decimal_places=2)
+    vauhti_min_km = models.DecimalField(max_digits=5, decimal_places=2)
+    kalorit = models.IntegerField()
+    nousu = models.IntegerField()
+    tuntuma = models.IntegerField()
+    kommentti = models.CharField(max_length=250)
+    kausi = models.CharField(max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = 'treenipaivakirja_harjoitus_vw'
