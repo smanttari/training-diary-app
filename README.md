@@ -57,7 +57,7 @@ python .\treenit\manage.py migrate
 * Import static data
 
 ````
-python .\treenit\manage.py loaddata aika.json
+python .\treenit\manage.py loaddata treenit\treenipaivakirja\fixtures\aika.json
 ````
 
 * Set following environment variables 

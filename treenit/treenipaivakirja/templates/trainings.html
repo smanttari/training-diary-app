@@ -51,9 +51,9 @@
                 <label class="text-muted mr-2" for="laji">Laji:</label>
                 <select class="form-control form-control ml-2" id="sport" name="sport">
                     {% for group,items in sports.items %}
-                        <option class="font-weight-bold" type="submit" value="{{ group }}" {% ifequal group sport %} selected {% endifequal %}>{{ group }}</option>
+                        <option class="font-weight-bold" type="submit" value="{{ group }}" {% if group == sport %} selected {% endif %}>{{ group }}</option>
                         {% for item in items %}
-                            <option type="submit" value="{{ item }}" {% ifequal item sport %} selected {% endifequal %}>&nbsp;&nbsp;&nbsp;{{ item }}</option>
+                            <option type="submit" value="{{ item }}" {% if item == sport %} selected {% endif %}>&nbsp;&nbsp;&nbsp;{{ item }}</option>
                         {% endfor %}
                     {% endfor %}
                 </select>
