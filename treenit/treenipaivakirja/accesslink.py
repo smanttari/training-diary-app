@@ -39,7 +39,7 @@ def get_access_token(auth_code):
 def create_headers(token):
     headers = {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        'Accept': 'application/json, application/gpx+xml',
         'Authorization': f'Bearer {token}'
         }
     return headers
@@ -92,6 +92,20 @@ def get_exercise_summary(token, user_id, url):
     headers = create_headers(token)
     response = requests.get(url, headers=headers)
     return response
+
+
+def get_exercise_gpx(polar_user, exrecise_id):
+    user_id = polar_user.polar_user_id
+    token = polar_user.access_token
+    transaction_id = polar_user.latest_exercise_transaction_id
+    url = '{}/users/{}/exercise-transactions/{}/exercises/{}/gpx'.format(
+        settings.ACCESSLINK_URL, user_id, transaction_id, exrecise_id)
+    headers = create_headers(token)
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.text
+    else:
+        return None
 
 
 def list_sleep(token):
@@ -200,6 +214,8 @@ def parse_exercises(polar_user, exercises):
         trainings[f'form-{i}-matka'] = round(e.get('distance',0)/1000,1) if e.get('distance',0) != 0 else None
         trainings[f'form-{i}-vauhti_km_h'] = round(e.get('distance',0)/(duration[0]+duration[1]/60)/1000,1) if e.get('distance',0) != 0 else None
         trainings[f'form-{i}-kalorit'] = e.get('calories')
+        trainings[f'form-{i}-has_route'] = e.get('has-route')
+        trainings[f'form-{i}-polar_exercise_id'] = e.get('id')
     return trainings
 
 

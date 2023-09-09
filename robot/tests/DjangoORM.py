@@ -139,7 +139,8 @@ class DjangoORM:
             tuntuma = 7,
             nousu = 192,
             kommentti = 'Intervals',
-            user = testuser
+            user = testuser,
+            reitti = 'robot_test.GPX'
         )
         zone1 = self.models.Teho.objects.create(
             harjoitus = skiing2,

@@ -70,8 +70,18 @@ Toggle Details
     When user search for word "Intervals"
     And user toggles details
     Then details table is visible
+    And gpx link is visible
     When user toggles details
     Then details table is not visible
+    And gpx link is not visible
+
+Toggle Details Without Content
+    Given trainings page is opened
+    When user search for word "Trail run"
+    And user toggles details
+    Then details error is visible
+    And details table is not visible
+    And gpx link is not visible
 
 Check Format For Duration-column
     Given trainings page is opened
@@ -164,6 +174,15 @@ Details Table Is Visible
 
 Details Table Is Not Visible
     Element Should Not Be Visible       details_table
+
+Gpx Link Is Visible
+    Element Should Be Visible       gpx_link
+
+Gpx Link Is Not Visible
+    Element Should Not Be Visible       gpx_link
+
+Details Error Is Visible
+    Element Should Be Visible       details_error
 
 Rest Days Checkbox Should Be Disabled
     Element Should Be Disabled      lepo

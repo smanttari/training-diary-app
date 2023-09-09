@@ -37,12 +37,18 @@
             {% for harjoitus_form in harjoitus_formset %}
                 <div class="carousel-item" id="item-{{ forloop.counter0 }}">
                     <div class="mt-4 pt-4 pb-3 border-top border-bottom border-primary">
-                        <div class="col-md-2 ml-auto text-right">
-                            <div class="custom-control custom-checkbox">
+                        <div class="col-md-6 ml-auto text-right">
+                            {% if harjoitus_form.has_route.value %}
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                {{ harjoitus_form.has_route }}
+                                <label class="custom-control-label" for="id_form-{{ forloop.counter0 }}-has_route">{{ harjoitus_form.has_route.label }}</label> 
+                            </div>
+                            {% endif %}
+                            <div class="custom-control custom-checkbox custom-control-inline">
                                 <input type="checkbox" class="custom-control-input" 
                                     id="save-{{ forloop.counter0 }}" name="save-training" 
                                     {% if not harjoitus_form.DELETE.value %} checked {% endif %}>
-                                <label class="custom-control-label" for="save-{{ forloop.counter0 }}">Tallenna</label>
+                                <label class="custom-control-label" for="save-{{ forloop.counter0 }}">Tallenna harjoitus</label>
                             </div>
                         </div>
                         {% include "training_form.html" %}

@@ -7,7 +7,7 @@
 {% block content %}
 
 <div class="mt-3">
-    <form method="post">{% csrf_token %}
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
         <fieldset>
             <div class="row">
                 <div class="col-md-10 border-bottom border-primary ml-3 pl-0 mb-4">
@@ -15,6 +15,13 @@
                 </div>
             </div>
             {% include "training_form.html" %}
+            <div class="form-group row">
+                <label class="col-md-2 col-xl-1 col-form-label"><b>{{ harjoitus_form.reitti.label }}</b></label> 
+                <div class="col-md-4">{{ harjoitus_form.reitti }}</div>
+                <div class="col-md-4 text-danger">
+                    {% for error in harjoitus_form.reitti.errors %}{{ error }}{% endfor %}
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-10 border-bottom border-primary ml-3 pl-0 mt-4 mb-4">
                     <h5>Tehot</h5>

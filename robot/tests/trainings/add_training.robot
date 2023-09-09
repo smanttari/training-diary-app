@@ -20,12 +20,20 @@ Adding A New Training
     And user enters "73"m ascent
     And user selects number "7" from feeling list
     And user enters "Nice training" to comment box
+    And user uploads route "robot_test.GPX"
     And user saves the training
     Then trainings page should be open
     And message should be "Harjoitus tallennettu."
 
 Adding A Blank Training Should Fail
     Given trainings form is opened
+    When user saves the training
+    Then trainings form should be open
+
+Adding File Extension Other Than GPX Should Fail
+    Given trainings form is opened
+    And user selects "Running" from sport list
+    And user uploads route "add_training.robot"
     When user saves the training
     Then trainings form should be open
 
@@ -118,6 +126,9 @@ User Selects Number "${feeling}" From Feeling List
 
 User Enters "${comment}" To Comment Box
     Input Text      id_kommentti    ${comment}
+
+User Uploads Route "${file}"
+    Choose File     id_reitti       ${CURDIR}/${file}
 
 User Saves The Training
     Click Button      save  

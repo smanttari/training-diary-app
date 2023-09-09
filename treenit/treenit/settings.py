@@ -196,3 +196,8 @@ try:
 except KeyError:
     OURA_CLIENT_KEY = None
     OURA_CLIENT_SECRET = None
+
+
+# Media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

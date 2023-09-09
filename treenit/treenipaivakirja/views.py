@@ -1,6 +1,7 @@
 import json
 import logging
 from datetime import datetime, timedelta
+from os import path
 
 import pandas as pd
 
@@ -11,6 +12,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
+from django.core.files.base import ContentFile
 from django.db.models import Max
 from django.db.models.deletion import ProtectedError
 from django.http import JsonResponse
@@ -278,7 +280,7 @@ def training_add(request):
     TehoFormset = inlineformset_factory(Harjoitus,Teho,form=TehoForm,extra=1,can_delete=True)
     required_fields = utils.get_required_fields(Teho)
     if request.method == "POST":
-        harjoitus_form = HarjoitusForm(request.user,request.POST)
+        harjoitus_form = HarjoitusForm(request.user,request.POST,request.FILES)
         teho_formset = TehoFormset(request.POST)
         if harjoitus_form.is_valid() and harjoitus_form.has_changed():
             instance = harjoitus_form.save(commit=False)
@@ -313,7 +315,7 @@ def training_modify(request,pk):
     required_fields = utils.get_required_fields(Teho)
     training = Harjoitus.objects.get(id=pk,user_id=request.user.id)
     if request.method == "POST":
-        harjoitus_form = HarjoitusForm(request.user,request.POST,instance=training)
+        harjoitus_form = HarjoitusForm(request.user,request.POST,request.FILES,instance=training)
         teho_formset = TehoFormset(request.POST,request.FILES,instance=training)
         if harjoitus_form.is_valid() and harjoitus_form.has_changed():
             harjoitus_form.save()
@@ -415,12 +417,20 @@ def accesslink_trainings(request):
             if harjoitus_formset.is_valid():
                 for form in harjoitus_formset:
                     if form not in harjoitus_formset.deleted_forms:
+                        polar_sport = form.cleaned_data['polar_sport']
                         PolarSport.objects.update_or_create(
                             polar_user_id=polar_user.polar_user_id, 
-                            polar_sport=form.cleaned_data['polar_sport'],
+                            polar_sport=polar_sport,
                             defaults={'laji': form.cleaned_data['laji']})        
                         instance = form.save(commit=False)
                         instance.user = request.user
+                        if form.cleaned_data['has_route']:
+                            exercise_id = instance.polar_exercise_id
+                            pvm = instance.pvm
+                            filename = pvm.strftime('%Y%m%d') + '_' + polar_sport + '_' + str(exercise_id) + '.GPX'
+                            gpx = al.get_exercise_gpx(polar_user, exercise_id)
+                            if gpx is not None:
+                                instance.reitti = ContentFile(gpx, filename)
                         instance.save()
                 messages.add_message(request, messages.SUCCESS, 'Harjoitukset tallennettu.')
                 al.commit_transaction(request, polar_user)
@@ -724,4 +734,15 @@ def trainings_data(request):
 @login_required
 def training_details(request, pk):
     training_details = tr.zones_per_training_to_list(pk)
-    return JsonResponse({'data':training_details})
+    route = Harjoitus.objects.get(id=pk,user_id=request.user.id).reitti
+    if route.name:
+        name = path.basename(route.name)
+        url = route.url
+    else:
+        name = ''
+        url = ''
+    response = {
+        'data': training_details, 
+        'route': {'name': name, 'url': url}
+    }
+    return JsonResponse(response)

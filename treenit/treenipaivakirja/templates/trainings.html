@@ -401,7 +401,7 @@ function rowDetails(rowData){
         dataType: "json",
         dataSrc: 'data',
         success: function (response){
-            div.html(formatDetails(response['data']))
+            div.html(formatDetails(response['data'],response['route']))
         }
     })
     return div
@@ -409,12 +409,12 @@ function rowDetails(rowData){
 
 
 // Format training details to html-table
-function formatDetails(details){
+function formatDetails(details,gpx){
     let html = ''
-    if (details.length == 0) {
-        html += '<span class="text-danger font-italic">Tarkempia tietoja ei saatavilla.</span>'
-    }
-    else {
+    if (details.length == 0 && !(gpx.name)) {
+        html += '<span class="text-danger font-italic" name="details_error">Tarkempia tietoja ei saatavilla.</span>'
+    } 
+    if (details.length > 0) {
         html += 
             '<h6>Tehot</h6>' +
             '<table class="table table-sm" name="details_table">' +
@@ -446,6 +446,11 @@ function formatDetails(details){
         )
         html += rows 
         html += '</table>'
+    }
+    if (gpx.name) {
+        let gpx_link = `<a href="${gpx.url}">${gpx.name}</a>`
+        html += '<h6>Reitti</h6>'
+        html += '<p name="gpx_link">' + gpx_link + '</p>'
     }
     return html
 }

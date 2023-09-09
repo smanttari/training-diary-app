@@ -1,7 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
 from django_cryptography.fields import encrypt
 from treenipaivakirja.utils import coalesce, duration_to_decimal, speed_min_per_km
+
+
+def user_gpx_path(instance, filename):
+    return "gpx/user_{0}/{1}".format(instance.user.id, filename)
         
         
 class Harjoitus(models.Model):
@@ -25,6 +30,8 @@ class Harjoitus(models.Model):
     vuorokaudenaika = models.IntegerField(choices=vuorokaudenaika_choices, blank=False, default=2, verbose_name="")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     nousu = models.IntegerField(null=True, blank=True, verbose_name='Nousu (m)')
+    reitti = models.FileField(upload_to=user_gpx_path, null=True, blank=True, validators=[FileExtensionValidator(['gpx'])])
+    polar_exercise_id = models.BigIntegerField(null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Harjoitus"

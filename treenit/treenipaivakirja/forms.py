@@ -32,13 +32,15 @@ class HarjoitusForm(forms.ModelForm):
             'nousu',
             'kalorit',
             'tuntuma',
-            'kommentti'
+            'kommentti',
+            'reitti',
+            'polar_exercise_id'
             ]
     
     def __init__(self, user, *args, **kwargs):
         super(HarjoitusForm, self).__init__(*args, **kwargs)
         for f in self.visible_fields():
-            if f.name != 'vuorokaudenaika':
+            if f.name != 'vuorokaudenaika' and f.name != 'reitti':
                 f.field.widget.attrs['class'] = 'form-control'
         self.fields['laji'].queryset = Laji.objects.filter(user=user)
 
@@ -149,3 +151,8 @@ class HarjoitusFormSet(forms.BaseFormSet):
             'class': 'form-control-plaintext text-muted',
             'readonly':True
             }))
+        form.fields['has_route'] = forms.BooleanField(
+            widget=forms.CheckboxInput(attrs={'class': 'custom-control-input'}),
+            label='Tallenna reitti',
+            required=False
+            )
