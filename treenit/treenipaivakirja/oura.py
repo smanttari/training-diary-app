@@ -50,42 +50,51 @@ def refresh_token(refresh_token):
     return response
 
 
-def sleep_summary(token, start_date=None, end_date=None):
+def sleep_summary(path, token, start_date=None, end_date=None):
     params = {}
     if start_date is not None:
-        params['start'] = start_date
+        params['start_date'] = start_date
     if end_date is not None:
-        params['end'] = end_date
+        params['end_date'] = end_date
     headers = {'Authorization': f'Bearer {token}'}
-    url = '{}/sleep?{}'.format(settings.OURA_URL, urlencode(params))
-    response = requests.get(url, headers=headers)
+    url = settings.OURA_URL + '/' + path
+    response = requests.get(url, headers=headers, params=params)
     return response
 
 
-def parse_sleep_data(user, sleep):
+def parse_sleep_data(user, sleep, daily_sleep):
     sleep_objects = []
-    for entry in sleep.json()['sleep']:
-        if entry['is_longest'] == 1:
+    sleep_data = sleep.json()['data']
+    daily_sleep_data = daily_sleep.json()['data']
+    for entry in sleep_data:
+        if entry['type'] == 'long_sleep':
+            # get sleep score from daily sleep data
+            for item in daily_sleep_data:
+                if item['day'] == entry['day']:
+                    score = item['score']
             sleep_objects.append(OuraSleep(
                 user = user,
-                date = entry['summary_date'],
+                date = entry['day'],
                 bedtime_start = datetime.strptime(entry['bedtime_start'][:19], '%Y-%m-%dT%H:%M:%S'),
                 bedtime_end = datetime.strptime(entry['bedtime_end'][:19], '%Y-%m-%dT%H:%M:%S'),
-                duration = entry['duration']/3600,
-                total = entry['total']/3600,
-                awake = entry['awake']/3600,
-                rem = entry['rem']/3600,
-                deep = entry['deep']/3600,
-                light = entry['light']/3600,
-                hr_min = entry['hr_lowest'],
-                hr_avg = entry['hr_average'],
-                hrv_avg = entry['rmssd'],
-                score = entry['score']
+                duration = entry['time_in_bed']/3600,
+                total = entry['total_sleep_duration']/3600,
+                awake = entry['awake_time']/3600,
+                rem = entry['rem_sleep_duration']/3600,
+                deep = entry['deep_sleep_duration']/3600,
+                light = entry['light_sleep_duration']/3600,
+                hr_min = entry['lowest_heart_rate'],
+                hr_avg = entry['average_heart_rate'],
+                hrv_avg = entry['average_hrv'],
+                score = score
             ))
     return sleep_objects
 
 
 def error_message(response):
-    response = response.json()
-    msg = '{} {}: {}'.format(response['status'], response['title'], response['detail'])
+    response_json = response.json()
+    if 'detail' in response_json:
+        msg = str(response.status_code) + ': ' + response_json['detail']['msg']
+    else:
+        msg = str(response.status_code)
     return msg

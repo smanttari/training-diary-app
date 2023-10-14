@@ -187,7 +187,7 @@ except KeyError:
     ACCESSLINK_CLIENT_SECRET = None
 
 # Oura
-OURA_URL = 'https://api.ouraring.com/v1'
+OURA_URL = 'https://api.ouraring.com/v2/usercollection'
 OURA_AUTH_URL = 'https://cloud.ouraring.com/oauth/authorize'
 OURA_ACCESS_TOKEN_URL = 'https://api.ouraring.com/oauth/token'
 try:

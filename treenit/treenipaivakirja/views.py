@@ -491,6 +491,8 @@ def oura_recovery(request):
     """ 
     Fetch recovery data from Oura
     """
+    user = User.objects.get(id=request.user.id)
+    current_day = datetime.now().date().strftime('%Y-%m-%d')
     try:
         oura_user = OuraUser.objects.get(user=request.user.id)
         access_token = oura_user.access_token
@@ -498,31 +500,34 @@ def oura_recovery(request):
     except:
         oura_auth_url = ou.build_auth_url()
         return redirect(oura_auth_url)
-
-    user = User.objects.get(id=request.user.id)
-    last_date = OuraSleep.objects.filter(user=user.id).aggregate(Max('date'))['date__max'] 
+    
+    last_date = OuraSleep.objects.filter(user=user.id).aggregate(Max('date'))['date__max']
     if last_date is None:
         start_date = None
     else:
-        start_date = last_date + timedelta(days=1)
-    sleep = ou.sleep_summary(access_token, start_date=start_date)
+        start_date = last_date.strftime('%Y-%m-%d')
 
+    sleep = ou.sleep_summary(path='sleep', token=access_token, start_date=start_date, end_date=current_day)
+    daily_sleep = ou.sleep_summary(path='daily_sleep', token=access_token, start_date=start_date, end_date=current_day)
+    
     if sleep.status_code == 401:    #unauthorized
         token = ou.refresh_token(refresh_token)
         if token.status_code != 200:
-            messages.add_message(request, messages.ERROR, ou.error_message(token))
+            messages.add_message(request, messages.ERROR, 'Oura Error: ' + ou.error_message(token))
             return redirect('recovery')
         else:
+            access_token = token.json()['access_token']
+            refresh_token = token.json()['refresh_token']
             OuraUser.objects.update(
-                access_token = token.json()['access_token'],
-                refresh_token = token.json()['refresh_token'],
+                access_token = access_token,
+                refresh_token = refresh_token,
                 user = user)
-            sleep = ou.sleep_summary(token.json()['access_token'], start_date=start_date)
-
+            sleep = ou.sleep_summary(path='sleep', token=access_token, start_date=start_date, end_date=current_day)
+            daily_sleep = ou.sleep_summary(path='daily_sleep', token=access_token, start_date=start_date, end_date=current_day)
     if sleep.status_code != 200:
-        messages.add_message(request, messages.ERROR, ou.error_message(sleep))
+        messages.add_message(request, messages.ERROR, 'Oura Error: ' + ou.error_message(sleep))
     else:
-        sleep_objects = ou.parse_sleep_data(user, sleep)
+        sleep_objects = ou.parse_sleep_data(user, sleep, daily_sleep)
         OuraSleep.objects.bulk_create(sleep_objects, ignore_conflicts=True)
         messages.add_message(request, messages.SUCCESS, 'Datan hakeminen onnistui.')
     return redirect('recovery')
@@ -542,7 +547,7 @@ def oura_callback(request):
     else:
         token = ou.get_access_token(auth_code)
         if token.status_code != 200:
-            messages.add_message(request, messages.ERROR, ou.error_message(token))
+            messages.add_message(request, messages.ERROR, 'Oura Error: ' + ou.error_message(token))
             return redirect('recovery')
         else:
             OuraUser.objects.create(

@@ -305,7 +305,7 @@ function filterByDateRange(data){
   let start = stringToDate(startDate)
   let end = stringToDate(endDate)
   filteredData = data.filter((d) => {
-    return new Date(d.category) >= start && new Date(d.category) <= end
+    return new Date(d.category).setHours(0,0,0,0) >= start && new Date(d.category).setHours(0,0,0,0) <= end
   })
   return filteredData
 }
