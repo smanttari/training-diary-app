@@ -1,0 +1,202 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Treenipäiväkirja | Harjoitukset | Kartta{% endblock %}
+
+{% block header %}HARJOITUKSET{% endblock %}
+{% block secondary-header %}KARTTA{% endblock %}
+
+{% block content %}
+
+<div class="bg-light border mb-2 p-2 pb-3">
+    <form id="map_form" class="form-inline mt-2" method="get">
+        <div class="form-group ml-1 mr-1">
+            <label class="text-muted mr-1" for="startdate">Aikaväli:</label>
+            <input class="form-control form-control ml-2" id="startdate" name="startdate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
+        </div>
+        <div class="form-group ml-1 mr-4">
+            <label class="text-muted" for="enddate">-</label>
+            <input class="form-control form-control ml-2" id="enddate" name="enddate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
+        </div>
+        <div class="form-group ml-1 mr-4">
+            <label class="text-muted mr-1" for="sport">Laji:</label>
+            <select class="form-control form-control ml-2" id="sport" name="sport">
+                {% for group,items in sports.items %}
+                    <option class="font-weight-bold" type="submit" value="{{ group }}" {% if group == sport %} selected {% endif %}>{{ group }}</option>
+                    {% for item in items %}
+                        <option type="submit" value="{{ item }}" {% if item == sport %} selected {% endif %}>&nbsp;&nbsp;&nbsp;{{ item }}</option>
+                    {% endfor %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group ml-1 mr-3">
+            <label class="text-muted mr-1" for="training">Harjoitus:</label>
+            <select class="form-control form-control ml-2" id="training" name="training">
+                {% for key, value in routes.items %}
+                    <option type="submit" value="{{ key }}" {% if key == training_id %} selected {% endif %}>{{ value.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col">
+            <div class="form-actions ml-3 float-right">
+                <button type="submit" id="show" name="show" class="btn btn-success"
+                {% if training_id == -1 %} disabled {% endif %}>Näytä</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="border mt-3" id="map"></div>
+
+{% if messages %}
+<script> 
+  setTimeout(() => $("#message_box").alert('close'), 5000)
+</script>
+{% endif %}
+
+<script type="text/javascript">
+
+// Data
+let sports = {{ sports|safe }}
+let routes = {{ routes|safe }}
+
+
+// Datepickers
+$('#startdate').datepicker({
+    uiLibrary: 'bootstrap4',
+    calendarWeeks: true,
+    format: 'dd.mm.yyyy',
+    header: true,
+    iconsLibrary: 'fontawesome',
+    showOtherMonths: true,
+    selectOtherMonths: true,
+    weekStartDay: 1,
+    stopPropagation: true,
+    width: 190,
+    value: '{{ startdate }}',
+    maxDate: function () {
+        return $('#enddate').val();
+    }
+})
+$('#enddate').datepicker({
+    uiLibrary: 'bootstrap4',
+    calendarWeeks: true,
+    format: 'dd.mm.yyyy',
+    header: true,
+    iconsLibrary: 'fontawesome',
+    showOtherMonths: true,
+    selectOtherMonths: true,
+    weekStartDay: 1,
+    width: 190,
+    value: '{{ enddate }}',
+    minDate: function () {
+        return $('#startdate').val();
+    }
+})
+
+
+// Buttons
+let currentStartDate = $('#startdate').val()
+let currentEndDate = $('#enddate').val()
+
+$("#startdate").change(function(event){
+    if ($(this).val() != currentStartDate) {
+        currentStartDate = $(this).val()
+        getTrainings()
+    } 
+})
+
+$("#enddate").change(function(event){
+    if ($(this).val() != currentEndDate) {
+        currentEndDate = $(this).val()
+        getTrainings()
+    } 
+})
+
+$("#startdate").keydown(function(event){
+    if (event.which == 13){
+        $(this).blur()
+        return false
+    }   
+})
+
+$("#enddate").keydown(function(event){
+    if (event.which == 13){
+        $(this).blur()
+        return false
+    }   
+})
+
+$("#sport").change(function(event){
+    getTrainings()
+})
+
+
+
+// Fetch trainings list
+function getTrainings(){
+    let params = {
+        'startdate': $('#startdate').val(),
+        'enddate': $('#enddate').val(),
+        'sport': $('#sport').val()
+    }
+
+    $.ajax({
+        url : "{% url 'map_data' %}",
+        type: 'post',
+        dataType: 'json',
+        data: {
+            data: JSON.stringify(params),
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function (response){
+            updateTrainingsList(response['data'])
+        }
+    })
+}
+
+
+function updateTrainingsList(options){
+    let trainingsCount = 0
+    $("#training").empty()
+    Object.entries(options).forEach(([key,value]) => {
+        $("#training").append($("<option></option>").attr("value",key).text(value.label))
+        if (key != -1 && key != 0){
+            trainingsCount += 1
+        }
+    })
+    if (trainingsCount == 0){
+        $("#training").val("-1")   //-1=NA
+        $("#show").prop('disabled', true)
+    }
+    else {
+        $("#training").val("0") //0=All
+        $("#show").prop('disabled', false)
+    }
+}
+
+
+// Map
+
+// initialize map
+var map = L.map('map')
+
+var tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map)
+
+// fit bounds
+var gpx = []
+Object.values(routes).forEach(route => {gpx.push(route.gpx)})
+var multipolyline = L.polyline(gpx)
+map.fitBounds(multipolyline.getBounds())
+
+// draw routes
+Object.entries(routes).forEach(([key,value]) => {
+    var polyline = L.polyline(value.gpx, {color: '#fd397a', weight: 3}).addTo(map)
+    polyline.bindTooltip(value.label)
+})
+
+</script>
+
+{% endblock %}

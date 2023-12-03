@@ -134,6 +134,47 @@ def trainings_view(request):
 
 
 @login_required
+def trainings_map(request):
+    """ 
+    View routes on map
+    """
+    user_id = request.user.id
+    enddate = datetime.now().date()
+    startdate = enddate - timedelta(days=28)
+    sports = tr.sports_to_dict(user_id)
+    sport = 'Kaikki'
+    training_id = 0
+
+    if request.GET.get('startdate'):
+        startdate = datetime.strptime(request.GET['startdate'], '%d.%m.%Y')
+    if request.GET.get('enddate'):
+        enddate = datetime.strptime(request.GET['enddate'], '%d.%m.%Y')
+    if request.GET.get('sport'):
+        sport = request.GET['sport']
+    if request.GET.get('training'):
+        training_id = int(request.GET['training'].replace(u'\xa0', ''))
+        if training_id != 0:
+            training = Harjoitus.objects.get(id=training_id, user_id=user_id)
+            startdate = training.pvm
+            enddate = training.pvm
+            sport = str(training.laji)
+
+    routes = tr.trainings_with_route(user_id, startdate, enddate, sport, training_id, include_gpx=True)
+    
+    if '-1' in routes.keys():
+        training_id = -1
+
+    return render(request, 'map.html', context = {
+        'sport': sport,
+        'sports': sports,
+        'startdate': startdate.strftime('%d.%m.%Y'),
+        'enddate': enddate.strftime('%d.%m.%Y'),
+        'routes': routes,
+        'training_id': training_id
+    })
+
+
+@login_required
 def reports_amounts(request):
     """ 
     Training amount reports 
@@ -751,3 +792,14 @@ def training_details(request, pk):
         'route': {'name': name, 'url': url}
     }
     return JsonResponse(response)
+
+
+@login_required
+def trainings_map_data(request):
+    user_id = request.user.id
+    data = json.loads(request.POST['data'])
+    sport = data['sport']
+    startdate = datetime.strptime(data['startdate'], '%d.%m.%Y')
+    enddate = datetime.strptime(data['enddate'], '%d.%m.%Y')
+    trainings = tr.trainings_with_route(user_id, startdate, enddate, sport, training_id=0, include_gpx=False)
+    return JsonResponse({'data': trainings})

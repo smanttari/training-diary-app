@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="{% static 'treenipaivakirja/css/gijgo.min.css' %}">
 	<link rel="stylesheet" href="{% static 'treenipaivakirja/css/datatables.min.css' %}">
 	<link rel="stylesheet" href="{% static 'treenipaivakirja/css/custom_styles.css' %}">
+	<link rel="stylesheet" href="{% static 'treenipaivakirja/css/leaflet.css' %}">
 
 	<script src="{% static 'treenipaivakirja/js/main.js' %}"></script>
 	<script src="{% static 'treenipaivakirja/js/jquery.min.js' %}"></script>
@@ -26,6 +27,7 @@
 	<script src="{% static 'treenipaivakirja/js/d3.min.js' %}"></script>
 	<script src="{% static 'treenipaivakirja/js/d3Charts.js' %}"></script>
 	<script src="{% static 'treenipaivakirja/js/d3Table.js' %}"></script>
+	<script src="{% static 'treenipaivakirja/js/leaflet.js' %}"></script>
 
 	{% block head %}{% endblock %}
 
@@ -35,7 +37,7 @@
 
 	<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
 		<a class="navbar-brand ml-1" href="{% url 'index' %}">
-			<img src="{% static 'treenipaivakirja/images/logo-light.svg' %}" height="25" alt="logo">
+			<img class="mb-1" src="{% static 'treenipaivakirja/images/logo-light.svg' %}" height="25" alt="logo">
 			<span class="ml-2">TREENIPÄIVÄKIRJA</span>
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +50,7 @@
 					<div class="dropdown-menu" aria-labelledby="trainings">
 						<h6 class="dropdown-header">HARJOITUKSET</h6>
 						<a class="dropdown-item" id="nav_trainings_list" href="{% url 'trainings' %}">Kalenteri</a>
+						<a class="dropdown-item" id="nav_trainings_map" href="{% url 'map' %}">Kartta</a>
 						<div class="dropdown-divider"></div>
 						<h6 class="dropdown-header">RAPORTIT</h6>
 						<a class="dropdown-item" id="nav_report_amounts" href="{% url 'reports_amounts' %}">Määrät</a>
@@ -79,11 +82,11 @@
 	<div class="main_div">
 
 		<div class="container-fluid">
-			<h3 class="text-uppercase text-dark">
+			<h4 class="text-uppercase text-dark">
 				{% block header %}{% endblock %}
 				<small class="text-muted pl-3">{% block secondary-header %}{% endblock %}</small>
 				<div class="float-sm-right">{% block header-right %}{% endblock %}</div>
-			</h3>
+			</h4>
 		</div>
 		<div class="container-fluid pt-3 pb-3">	
 			{% for message in messages %}

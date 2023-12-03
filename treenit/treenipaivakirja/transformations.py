@@ -1,13 +1,15 @@
 import json
 from datetime import datetime
+from os import path
 
 import pandas as pd
 import numpy as np
 
 from treenipaivakirja.models import Harjoitus, Aika, Laji, Teho, Tehoalue, Kausi, PolarSleep, PolarRecharge, OuraSleep
-from treenipaivakirja.utils import duration_to_string, dataframe_to_dict,coalesce
+from treenipaivakirja.utils import duration_to_string, dataframe_to_dict,coalesce,parse_coordinates_from_gpx
 from treenipaivakirja.calculations import first_training_date
-from django.db.models import Min
+from django.db.models import Min, Q
+from django.conf import settings
 
 
 def trainings_to_df(user_id, columns, startdate=None, enddate=None, sport='Kaikki', restdays=True, duration_format='str', date_format='%Y-%m-%d'):
@@ -322,3 +324,41 @@ def oura_sleep_to_df(user_id):
     sleep_df = pd.DataFrame(sleep, columns = ['date','duration','score','hr_avg','hrv_avg'])
     sleep_df['date'] = sleep_df['date'].astype(str)
     return sleep_df
+
+
+def trainings_with_route(user_id, startdate, enddate, sport, training_id, include_gpx):
+    if training_id == 0:
+        trainings = Harjoitus.objects.filter(user=user_id, pvm__gte=startdate, pvm__lte=enddate
+            ).exclude(reitti__isnull=True
+            ).exclude(reitti__exact=''
+            ).values_list('id','aika','laji__laji_nimi','matka','reitti')
+        if sport != 'Kaikki':
+            trainings = trainings.filter(Q(laji__laji_nimi=sport) | Q(laji__laji_ryhma=sport))
+    else:
+        trainings = Harjoitus.objects.filter(user=user_id, id=training_id
+            ).exclude(reitti__isnull=True
+            ).exclude(reitti__exact=''
+            ).values_list('id','aika','laji__laji_nimi','matka','reitti')
+    
+    routes = {}
+    if len(trainings) == 0:
+        routes['-1'] = {'label': '----', 'gpx': []}
+    elif len(trainings) >= 1:
+        routes['0'] = {'label': 'Kaikki', 'gpx': []}
+
+    for t in trainings:
+        label = f'{t[1]}-{t[2]}'
+        if t[3] is not None:
+            label += '-' + str(t[3]) + 'km'
+        if include_gpx:
+            gpx_file = path.join(settings.MEDIA_ROOT, t[4])
+            gpx = parse_coordinates_from_gpx(gpx_file)
+            # for performance reason, pick only every x'th coordinate if there is lot of data
+            if len(trainings) > 50 and len(trainings) <= 500:
+                gpx = gpx[::10]
+            elif len(trainings) > 500:
+                gpx = gpx[::30]
+            routes[t[0]] = {'label': label, 'gpx': gpx}
+        else:
+            routes[t[0]] = {'label': label, 'gpx': []}   
+    return routes

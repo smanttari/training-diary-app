@@ -363,3 +363,14 @@ class ViewTest(TestCase):
         data = response.json()['data']
         self.assertEqual(data[0],{'nro': 1, 'tehoalue_id__tehoalue': 'Aerobic', 'kesto_h': 0, 'kesto_min': 30, 'keskisyke': 133, 'maksimisyke': None, 'matka': None, 'vauhti_min': None, 'vauhti_s': None})
         self.assertEqual(data[1],{'nro': 2, 'tehoalue_id__tehoalue': 'Anaerobic', 'kesto_h': 0, 'kesto_min': 15, 'keskisyke': 165, 'maksimisyke': 177, 'matka': None, 'vauhti_min': None, 'vauhti_s': None})
+
+    def test_trainings_map_view_for_user1(self):
+        login = self.client.login(username='user1', password='top_secret1')
+        response = self.client.get(reverse('map'))
+        context = response.context
+        self.assertEqual(context['sport'],'Kaikki')
+        self.assertEqual(context['sports'],{'Kaikki': [], 'Cardio': ['Running', 'Skiing'], 'Muut': ['Gym']})
+        self.assertEqual(context['startdate'],'15.12.2019')
+        self.assertEqual(context['enddate'],'12.01.2020')
+        self.assertEqual(context['routes'],{'-1': {'label': '----', 'gpx': []}})
+        self.assertEqual(context['training_id'],-1)

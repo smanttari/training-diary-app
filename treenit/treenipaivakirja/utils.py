@@ -1,4 +1,5 @@
 from datetime import datetime
+import xml.etree.ElementTree as ET
 
 import pandas as pd
 import numpy as np
@@ -118,3 +119,22 @@ def week_number(day):
     elif week == 1 and month == 12:
         week = 52
     return week
+
+
+def parse_coordinates_from_gpx(gpx):
+    """
+    Parses coordinates from given GPX file.
+    Returns list of [lat,lon] coordinates.
+    """
+    coord = []
+    namespace = {"gpx": "http://www.topografix.com/GPX/1/1"}
+    try:
+        tree = ET.parse(gpx)
+        root = tree.getroot()
+        trk = root.find('gpx:trk', namespace)
+        trkseg = trk.find('gpx:trkseg', namespace)
+        for point in trkseg.findall('gpx:trkpt', namespace):
+            coord.append([point.attrib['lat'],point.attrib['lon']])
+    except:
+        pass
+    return coord

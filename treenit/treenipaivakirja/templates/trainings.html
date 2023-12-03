@@ -1,5 +1,5 @@
 {% extends "base_generic.html" %}
-{% block title %}Treenipäiväkirja | Harjoitukset{% endblock %}
+{% block title %}Treenipäiväkirja | Harjoitukset | Kalenteri{% endblock %}
 {% load l10n %}
 {% load static %}
 
@@ -8,10 +8,12 @@
 {% endblock %}
 
 {% block header %}HARJOITUKSET{% endblock %}
+{% block secondary-header %}KALENTERI{% endblock %}
+
 {% block header-right %}
     <div class="form-inline">
         <div class="dropdown">
-            <button class="btn btn-sm btn-primary dropdown-toggle mr-2" type="button" id="export" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-sm btn-primary dropdown-toggle mr-3" type="button" id="export" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-download mr-2"></i>LATAA
             </button>
             <div class="dropdown-menu">
@@ -20,7 +22,7 @@
             </div>
         </div>
         <div class="dropdown">
-            <button class="btn btn-sm btn-primary dropdown-toggle mr-2" type="button" id="import" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-sm btn-primary dropdown-toggle mr-3" type="button" id="import" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-upload mr-2"></i>HAE
             </button>
             <div class="dropdown-menu">
@@ -39,16 +41,16 @@
 
     <div class="bg-light border mb-2 p-2 pb-3">
         <form id="filter_form" class="form-inline mt-2" method="post">{% csrf_token %}
-            <div class="form-group ml-3 mr-1">
-                <label class="text-muted mr-2" for="startdate">Aikaväli:</label>
+            <div class="form-group ml-1 mr-1">
+                <label class="text-muted mr-1" for="startdate">Aikaväli:</label>
                 <input class="form-control form-control ml-2" id="startdate" name="startdate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
             </div>
-            <div class="form-group ml-2 mr-2">
-                <label class="text-muted mr-2" for="startdate">-</label>
+            <div class="form-group ml-1 mr-4">
+                <label class="text-muted" for="enddate">-</label>
                 <input class="form-control form-control ml-2" id="enddate" name="enddate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
             </div>
-            <div class="form-group ml-3 mr-3">
-                <label class="text-muted mr-2" for="laji">Laji:</label>
+            <div class="form-group ml-1 mr-4">
+                <label class="text-muted mr-1" for="sport">Laji:</label>
                 <select class="form-control form-control ml-2" id="sport" name="sport">
                     {% for group,items in sports.items %}
                         <option class="font-weight-bold" type="submit" value="{{ group }}" {% if group == sport %} selected {% endif %}>{{ group }}</option>
@@ -58,7 +60,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="form-group ml-3 mr-3">
+            <div class="form-group ml-1 mr-3">
                 <div class="custom-control custom-checkbox" id="restdays">
                     <input type="checkbox" class="custom-control-input" id="lepo" name="lepo" checked>
                     <label class="text-muted custom-control-label" for="lepo">Näytä lepopäivät</label>
@@ -69,7 +71,7 @@
 
     <div class="mt-4">
         <div class="table-responsive">
-            <table id="treenit" class="table table-sm">
+            <table id="treenit" class="table table-sm table-bordered">
                 <thead class="thead-light">
                     <tr class="text-nowrap">
                     {% for header in table_headers %}
@@ -278,7 +280,7 @@ var treenitTable = $('#treenit').DataTable({
         { 
             targets: [-2],
             orderable: false,
-            className: 'border-right-0 pr-2 pl-2',
+            className: 'border-right-0 pr-1 pl-2',
             render: function(data, type, row, meta){
                 if (data !== ''){
                     let url = "{{ request.path }}" + data + "/modify"
@@ -369,8 +371,8 @@ var treenitTable = $('#treenit').DataTable({
             .reduce( function (a, b) {return intVal(a) + intVal(b)}, 0)
 
         $( api.column(0).footer() ).html('Yht.')
-        $( api.column(4).footer() ).html(round(kesto_page_total,1) + ' / '+  round(kesto_total,1) + 'h')
-        $( api.column(6).footer() ).html(round(matka_page_total,1) + ' / '+  round(matka_total,1) + 'km')
+        $( api.column(4).footer() ).html(round(kesto_page_total,1) + ' / '+  round(kesto_total,1) + ' h')
+        $( api.column(6).footer() ).html(round(matka_page_total,1) + ' / '+  round(matka_total,1) + ' km')
         }
     })
 
@@ -401,7 +403,7 @@ function rowDetails(rowData){
         dataType: "json",
         dataSrc: 'data',
         success: function (response){
-            div.html(formatDetails(response['data'],response['route']))
+            div.html(formatDetails(id,response['data'],response['route']))
         }
     })
     return div
@@ -409,7 +411,7 @@ function rowDetails(rowData){
 
 
 // Format training details to html-table
-function formatDetails(details,gpx){
+function formatDetails(id,details,gpx){
     let html = ''
     if (details.length == 0 && !(gpx.name)) {
         html += '<span class="text-danger font-italic" name="details_error">Tarkempia tietoja ei saatavilla.</span>'
@@ -417,7 +419,7 @@ function formatDetails(details,gpx){
     if (details.length > 0) {
         html += 
             '<h6>Tehot</h6>' +
-            '<table class="table table-sm" name="details_table">' +
+            '<table class="table table-sm table-bordered" name="details_table">' +
                 '<thead class="thead-light">' +
                 '<tr>' +
                     '<th>Nro</th>' +
@@ -448,9 +450,13 @@ function formatDetails(details,gpx){
         html += '</table>'
     }
     if (gpx.name) {
-        let gpx_link = `<a href="${gpx.url}">${gpx.name}</a>`
+        let gpx_link = `<a id="gpx_${id}" href="${gpx.url}">${gpx.name}</a>`
+        let map_link = `<a id="map_${id}" href="{% url 'map' %}?training=${id}"><i class="far fa-map"></i></a>`
         html += '<h6>Reitti</h6>'
-        html += '<p name="gpx_link">' + gpx_link + '</p>'
+        html += '<p>'
+        html += '<span name="gpx_link">' + gpx_link + '</span>'
+        html += '<span name="map_link" class="ml-4">' + map_link + '</span>'
+        html += '</p>'
     }
     return html
 }

@@ -5,7 +5,10 @@ import datetime
 
 from django.test import TestCase
 
-from treenipaivakirja.utils import duration_to_string, duration_to_decimal, speed_min_per_km, dataframe_to_dict, coalesce, week_number
+from treenipaivakirja.utils import (
+    duration_to_string, duration_to_decimal, speed_min_per_km, 
+    dataframe_to_dict, coalesce, week_number, parse_coordinates_from_gpx
+)
 
 
 class DurationToStringTest(TestCase):
@@ -154,3 +157,27 @@ class WeekNumberTest(TestCase):
     def test_january_week_53(self):
         day = datetime.date(2016,1,1)
         self.assertEqual(week_number(day),1)
+
+
+class GpxParseTest(TestCase):
+    def test_gpx_parse(self):
+        gpx = '../robot/tests/trainings/robot_test.GPX'
+        coord = [
+                ['60.25270667', '24.533855'], ['60.25270667', '24.533855'], 
+                ['60.25270667', '24.533855'], ['60.25270667', '24.533855'], 
+                ['60.25270667', '24.533855'], ['60.25271', '24.53385333'], 
+                ['60.25271833', '24.53383833'], ['60.25273167', '24.53381167'], 
+                ['60.25273667', '24.53378'], ['60.25274333', '24.53375'], 
+                ['60.25275', '24.533715'], ['60.25276', '24.533685'], 
+                ['60.25277833', '24.53363167'], ['60.25279167', '24.53358667'], 
+                ['60.252805', '24.53354667'], ['60.252815', '24.53350667'], 
+                ['60.25282333', '24.53346333'], ['60.25283167', '24.53342333'], 
+                ['60.25283833', '24.53337667'], ['60.25284833', '24.53333667'], 
+                ['60.25285833', '24.533295'], ['60.25286667', '24.53325333'], 
+                ['60.25288', '24.53321667'], ['60.25289333', '24.53317833'], 
+                ['60.25290667', '24.53314167'], ['60.252925', '24.53309333'], 
+                ['60.25294', '24.53304'], ['60.25295833', '24.53299'], 
+                ['60.25297167', '24.53294333'], ['60.25298667', '24.53288833'], 
+                ['60.253', '24.53284833']
+                ]
+        self.assertEqual(parse_coordinates_from_gpx(gpx),coord)
