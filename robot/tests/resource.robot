@@ -1,5 +1,6 @@
 *** Settings ***
 Documentation     A resource file with reusable keywords and variables.
+Library           Collections
 Library           SeleniumLibrary
 Library           DatabaseLibrary
 Library           DjangoORM.py    ${APP_ROOT}
@@ -50,7 +51,11 @@ Index Page Should Be Open
 
 Trainings Page Should Be Open
     Location Should Be      ${URL}trainings/
-    Title Should Be         Treenipäiväkirja | Harjoitukset
+    Title Should Be         Treenipäiväkirja | Harjoitukset | Kalenteri
+
+Map Page Should Be Open
+    Location Should Contain      ${URL}trainings/map
+    Title Should Be         Treenipäiväkirja | Harjoitukset | Kartta
 
 Settings Page Should Be Open
     Location Should Be      ${URL}settings/

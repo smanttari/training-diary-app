@@ -95,6 +95,13 @@ Disabling Rest Days Checkbox
     When user selects "Kaikki"-group
     Then rest days checkbox should be enabled
 
+View route map
+    Given trainings page is opened
+    When user search for word "Intervals"
+    And user toggles details
+    And user clicks map link
+    Then map page should be open
+
 
 *** Keywords ***
 Setup Test Data And Log In
@@ -189,3 +196,6 @@ Rest Days Checkbox Should Be Disabled
 
 Rest Days Checkbox Should Be Enabled
     Element Should Be Enabled      lepo
+
+User Clicks Map Link
+    Click Element       map_link
