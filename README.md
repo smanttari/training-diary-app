@@ -44,7 +44,7 @@ Training and recovery data can be uploaded from [Polar](https://www.polar.com/en
 
 ## Setting up the development environment ##
 
-* Install Python >= 3.6
+* Install Python >= 3.10
 
 * Clone repository
 
