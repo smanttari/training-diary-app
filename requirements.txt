@@ -3,5 +3,5 @@ django-widget-tweaks==1.4.12
 pandas==2.1.4
 openpyxl==3.1.2
 freezegun==1.2.1
-requests==2.27.1
+requests==2.31.0
 django-cryptography==1.1
