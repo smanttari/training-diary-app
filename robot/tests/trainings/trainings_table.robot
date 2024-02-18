@@ -10,16 +10,16 @@ Filter By Sport
     Given trainings page is opened
     When user selects "Running"
     Then column Laji should contain "Running"
-    And total duration should be "2 / 2h"
-    And total distance should be "20 / 20km"
+    And total duration should be "2 / 2 h"
+    And total distance should be "20 / 20 km"
 
 Filter By Sport Group
     Given trainings page is opened
     When user selects "Skiing"-group
     Then column Laji should contain "Skiing (classic)"
     And column Laji should contain "Skiing (free)"
-    And total duration should be "2.8 / 2.8h"
-    And total distance should be "36 / 36km"
+    And total duration should be "2.8 / 2.8 h"
+    And total distance should be "36 / 36 km"
 
 Filter By Valid Date Range
     Given trainings page is opened
