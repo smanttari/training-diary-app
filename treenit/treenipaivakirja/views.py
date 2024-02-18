@@ -329,8 +329,15 @@ def training_add(request):
             instance.save()
             training = Harjoitus.objects.get(id=instance.id)
             teho_formset = TehoFormset(request.POST, request.FILES, instance=training)
-            if teho_formset.is_valid() and teho_formset.has_changed():
-                teho_formset.save()
+            teho_formset.is_valid()
+            for teho_form in teho_formset:
+                data = teho_form.cleaned_data
+                if len(data) > 0: 
+                    if not data['DELETE']:
+                        data['harjoitus'] = training
+                        del data['DELETE']
+                        teho = Teho(**data)
+                        teho.save()
             messages.add_message(request, messages.SUCCESS, 'Harjoitus tallennettu.')
             return redirect('trainings')
     else:
@@ -357,7 +364,7 @@ def training_modify(request,pk):
     training = Harjoitus.objects.get(id=pk,user_id=request.user.id)
     if request.method == "POST":
         harjoitus_form = HarjoitusForm(request.user,request.POST,request.FILES,instance=training)
-        teho_formset = TehoFormset(request.POST,request.FILES,instance=training)
+        teho_formset = TehoFormset(request.POST,request.FILES,instance=training,initial=[{'harjoitus':training.id}])
         if harjoitus_form.is_valid() and harjoitus_form.has_changed():
             harjoitus_form.save()
         if teho_formset.is_valid() and teho_formset.has_changed():
@@ -366,7 +373,7 @@ def training_modify(request,pk):
         return redirect('trainings')
     else:
         harjoitus_form = HarjoitusForm(request.user,instance=training)
-        teho_formset = TehoFormset(instance=training)
+        teho_formset = TehoFormset(instance=training, initial=[{'harjoitus':training.id}])
         for form in teho_formset:
             form.fields['tehoalue'].queryset = Tehoalue.objects.filter(user=request.user).order_by('jarj_nro')
     

@@ -57,7 +57,8 @@
             </button> 
         </div> 
         <div style="display: none">{{ form.DELETE }}</div>
-        {% for field in form.hidden_fields %}{{ field }}{% endfor %}
+        {{ form.harjoitus.as_hidden }}
+        {{ form.id.as_hidden }}
     </div>
     <hr class="d-block d-md-none">
 </div>
