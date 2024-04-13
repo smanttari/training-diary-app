@@ -1,23 +1,18 @@
 # Training Diary App #
 
-Web application for tracking and analyzing trainings. 
-
-Training and recovery data can be uploaded from [Polar](https://www.polar.com/en/accesslink) and [Oura](https://cloud.ouraring.com/docs/).
+Web application for tracking and analyzing trainings.
 
 ## Features ##
 
 ### Keep track of your trainings
 
-* Input your trainings 
-    * either manually or load them through Polar API
-* Investigate training calendar
-* Download training data into excel or csv
+Input your trainings or load them through [Polar API](https://www.polar.com/en/accesslink):
 
 ![trainings](./img/trainings.png)
 
 ### Analyze your trainings
 
-* Analyze your trainings with various graphical reports
+Analyze your trainings with various graphical reports:
 
 ![report_amount](./img/report_amount.png)
 
@@ -25,20 +20,19 @@ Training and recovery data can be uploaded from [Polar](https://www.polar.com/en
 
 ### View routes on map
 
-* View training routes on map
+View training routes on map:
 
 ![map](./img/map.png)
 
 ### Follow your recovery
 
-* Fetch sleep data from Polar or Oura
-* Analyze it with recovery dashboard
+Load sleep data from [Polar](https://www.polar.com/en/accesslink) or [Oura](https://cloud.ouraring.com/docs/) and analyze it with recovery dashboard:
 
 ![recovery](./img/recovery.png)
 
 ### Personalize settings
 
-* Sports, training zones and seasons can be customized for each user
+Customize sports, training zones and seasons:
 
 ![settings](./img/settings.png)
 
