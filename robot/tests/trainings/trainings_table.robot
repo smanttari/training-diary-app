@@ -144,13 +144,13 @@ User Changes Table Length to "${length}"
     Select From List By Label       treenit_length      ${length}
 
 User Goes To Next Page
-    Click Element   treenit_next 
+    Click Link   Seuraava 
 
 User Goes To Previous Page
-    Click Element   treenit_previous 
+    Click Link   Edellinen 
 
 User Search For Word "${word}"
-    Input Text  jquery:.dataTables_filter input     ${word}
+    Input Text  dt-search-0    ${word}
 
 User Toggles Details
     Click Element   xpath://td[contains(@class, 'details-control')]

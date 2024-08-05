@@ -66,5 +66,6 @@ Show Button Should Be Disabled
     Element Should Be Disabled      show
 
 Training Dropdown Should Contain "${training}"
+    Set Selenium Implicit Wait      1 seconds
     ${trainings_list}        Get List Items     training
     List Should Contain Value       ${trainings_list}        ${training}
