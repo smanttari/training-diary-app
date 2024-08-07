@@ -136,26 +136,27 @@ function drawAmountPerZone(){
   let div = 'chart_amount_per_zone'
   let data = amountPerZone[groupBy]
   let options = {
-    type:'line',
-    line: {width: 2, labels:{size:12}},
-    circle: {radius: 5, display: true},
+    type:'bar',
+    stacked: true,
     width: 800,
     height: 400,
     margin: {top: 40, bottom: 60, left: 40, right: 100},
     xaxis: {font: {size:11}, orientation: 'skew'},
     yaxis: {font: {size:11}, min:0},
     colors: [
-      '#646c9a',
       '#536be2',
+      '#7a86ea',
       '#9ca2f2',
+      '#bbbff9',
       '#dadcff',
+      '#bcbfe5',
       '#9ea2cb',
-      '#8187b2'
+      '#8187b2',
+      '#646c9a',
     ],
     padding: 0.2,
     grid: true,
     tooltip: {suffix:" h"},
-    animation: {duration: 500, delay: 20},
     legend: {coord: {x: 730, y: 50}, font: {size: 11}},
     responsiveness: true
     }
