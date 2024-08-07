@@ -56,6 +56,7 @@ function createTable(div,data,opt){
         .text(d => d)
         .style('padding', padding)
         .style('text-align', textAlign)
+        .attr('value', d => d)
 
     if (sort){
         headers.append('i')
@@ -68,14 +69,15 @@ function createTable(div,data,opt){
             .style('opacity','0.3')  
 
         headers.on('click', function (d) {
+            key = d3.select(this).attr('value')
             if (this.className != 'ascending'){
-                rows.sort(function(a, b) {return d3.ascending(a[d],b[d])})
+                rows.sort(function(a, b) {return d3.ascending(a[key],b[key])})
                 this.className = 'ascending'
                 headers.selectAll('#sort_up').style('opacity','0.3')
                 headers.selectAll('#sort_down').style('opacity','0.3')
                 d3.select(this).select('#sort_up').style('opacity','1')
             } else {
-                rows.sort(function(a, b) {return d3.descending(a[d],b[d])})
+                rows.sort(function(a, b) {return d3.descending(a[key],b[key])})
                 this.className = 'descending'
                 headers.selectAll('#sort_up').style('opacity','0.3')
                 headers.selectAll('#sort_down').style('opacity','0.3')

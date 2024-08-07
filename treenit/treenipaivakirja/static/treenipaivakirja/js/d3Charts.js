@@ -31,6 +31,7 @@ function drawComboChart(div,dataset,opt){
     let tooltip = options.tooltip || false
     let traceDiff = options.traceDiff || false
     let type = options.type || 'bar'
+    let stacked = options.stacked || false
     let width = options.width || 500
     let xaxis = options.xaxis || {font: {size: 10}, orientation: 'horizontal', format: false, tickCount: (dataset) ? dataset.length : 0, date:false}
     let xlabel = options.xlabel || {label:'', size:10, fontWeight: 'normal'}
@@ -103,12 +104,23 @@ function drawComboChart(div,dataset,opt){
     let categories = data.map(d => d.category)
     let series = []
     let values = []
+    let seriesSum = []
+
     data.forEach(element => {
         Object.keys(element.series).forEach(key => {
             if (!series.includes(key)){series.push(key)}
         })
         values = values.concat(Object.values(element.series))
+        let total = 0
+        for (let category in element.series) {
+            let val = element.series[category]
+            if (typeof val !== 'undefined' && val !== ''){
+                total += val
+            }
+        }
+        seriesSum.push(total)
     })
+
     let types = {}
     for (let i=0; i<series.length; i++){
         if (serietype && Object.keys(serietype).includes(String(i))){
@@ -178,8 +190,13 @@ function drawComboChart(div,dataset,opt){
 
     let yaxisMin = yaxis.min
     let yaxisMax = yaxis.max
-    if (typeof yaxisMin == 'undefined' || yaxisMin > d3.min(values1, d => +d)) {yaxisMin = d3.min(values1, d => +d) - ((d3.max(values1, d => +d) - d3.min(values1, d => +d)) * 0.1)}
-    if (typeof yaxisMax == 'undefined' || yaxisMax < d3.max(values1, d => +d)) {yaxisMax = d3.max(values1, d => +d) + ((d3.max(values1, d => +d) - d3.min(values1, d => +d)) * 0.1)}
+    if (stacked){
+        if (typeof yaxisMax == 'undefined') {yaxisMax = d3.max(seriesSum, d => +d)}
+    }
+    else {
+        if (typeof yaxisMin == 'undefined' || yaxisMin > d3.min(values1, d => +d)) {yaxisMin = d3.min(values1, d => +d) - ((d3.max(values1, d => +d) - d3.min(values1, d => +d)) * 0.1)}
+        if (typeof yaxisMax == 'undefined' || yaxisMax < d3.max(values1, d => +d)) {yaxisMax = d3.max(values1, d => +d) + ((d3.max(values1, d => +d) - d3.min(values1, d => +d)) * 0.1)}
+    }
 
     let y1Scale = d3.scaleLinear()
         .range([height - margin.bottom, margin.top])
@@ -275,11 +292,17 @@ function drawComboChart(div,dataset,opt){
             .attr('dy', '-0.2em')
             .attr('transform', 'rotate(-45)')
     }
-    
+
     // add bars
+    if (stacked){
+        addStackedBars(series,y1Scale)
+    }
+
     series1.filter(d => types[d] == 'bar').forEach(serie => {
-        addBars(serie,y1Scale,yaxisMin)
-        addBarlabels(serie,y1Scale)
+        if (!stacked){
+            addBars(serie,y1Scale,yaxisMin)
+            addBarlabels(serie,y1Scale)
+        }
         if (tooltip){
             addTooltips(serie)
         }
@@ -411,6 +434,35 @@ function drawComboChart(div,dataset,opt){
         }
     }
 
+    function addStackedBars(series,yScale){
+        // convert data to stacked intervals
+        if (stacked){
+            var valuesToStack = data.map(d => Object.assign({}, d.series, {'category': d['category']}))
+            var stackGen = d3.stack().keys(series)
+            var stackedValues = stackGen(valuesToStack)
+        }
+
+        let bars = svg.append('g')
+            .attr('class','bars')
+            .selectAll('g')
+            .data(stackedValues)
+            .enter()
+            .append('g')
+            .attr('class', d => 'bars_' + d.key.replace(/[^a-zA-Z0-9-_]/g,'_'))
+            .attr("fill", d => colorScale(d.key))
+
+        bars.selectAll('rect')
+            .data(d => d)
+            .enter()
+            .append('rect')
+            .attr('x', d => xScale(d.data.category))
+            .attr('y', d => yScale(d[1]))
+            .attr('width', xScale.bandwidth()) 
+            .attr('height', d => {return yScale(d[0]) - yScale(d[1])})
+            .attr('category', d => d.data.category)
+            .attr('value', d => {return Math.round((d[1] - d[0]) * 10) / 10})
+    }
+
     function addBarlabels(serie,yScale){
         svg.append('g')
             .attr('class','barlabels_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_'))
@@ -485,6 +537,9 @@ function drawComboChart(div,dataset,opt){
             .attr('r', circle.radius)
             .style('fill', colorScale(serie))
             .style('fill-opacity', circle.display ? '1' : '0')
+            .attr('category', d => d.category)
+            .attr('serie', serie)
+            .attr('value', d => d.series[serie])
             .on('mouseenter', function() { 
                 if (!circle.display){
                     d3.select(this).style('fill-opacity', 1)
@@ -501,7 +556,7 @@ function drawComboChart(div,dataset,opt){
     }
 
     function addTooltips(serie){
-        let formatDate = d3.timeFormat(xaxis.format) 
+        let formatDate = d3.timeFormat(xaxis.format)
         if (types[serie] == 'bar'){
             var elements = svg.selectAll('.bars_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_')).selectAll('rect')	
         }
@@ -511,10 +566,12 @@ function drawComboChart(div,dataset,opt){
         elements.attr('data-toggle','tooltip')
             .attr('data-placement','top')
             .attr('data-html','true')
-            .attr('title', d => '<b>' + (xaxis.date ? formatDate(d.category) : d.category) + '</b></br>' + 
+            .attr('title', function(d) {return '<b>' + 
+                (xaxis.date ? formatDate(new Date(d3.select(this).attr('category'))) : d3.select(this).attr('category')) + '</b></br>' + 
                 (tooltip.prefix || '') +
-                (seriesHeaders ? serie + ': ' : '') + d.series[serie] + 
-                (tooltip.suffix || ''))
+                (seriesHeaders ? serie + ': ' : '') + d3.select(this).attr('value') + 
+                (tooltip.suffix || '')
+            })
         }
 
 
