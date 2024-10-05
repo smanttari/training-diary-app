@@ -150,13 +150,24 @@ var filterBySport = function (settings, data, dataIndex){
     var selectedSport = $('#sport').val()
     if (selectedSport in sports){
         var sportsArray = sports[selectedSport] 
-        if (sportsArray.length == 0){return true}
-        else if (sportsArray.includes(sportCol)){return true}
-        else {return false}
+        var sportsArray2 = sportsArray.map(replaceScandic)
+        if (sportsArray.length == 0){
+            return true
+        }
+        else if (sportsArray.includes(sportCol) || sportsArray2.includes(sportCol)){
+            return true
+        }
+        else {
+            return false
+        }
     }
     else {
-        if (sportCol == selectedSport){return true}
-        else {return false}
+        if (sportCol == selectedSport || sportCol == replaceScandic(selectedSport)){
+            return true
+        }
+        else {
+            return false
+        }
     } 
   }
 

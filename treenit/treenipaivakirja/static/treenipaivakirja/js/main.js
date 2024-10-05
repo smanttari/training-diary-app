@@ -165,3 +165,9 @@ function range(start, end) {
     }
     return ans
 }
+
+
+// Replace scandic characters in word
+function replaceScandic(word){
+    return word.replace('ä','a').replace('ö','o')
+}
