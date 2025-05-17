@@ -10,13 +10,11 @@
 {% for form in seasons_formset %}
 {% if form.non_field_errors %}
 <div id = "message_box" class="alert alert-danger alert-dismissible fade show" role="alert">
-  <strong class="text-uppercase mr-1">
+  <strong class="text-uppercase me-1">
     <i class="fas fa-times-circle"></i>
   </strong>
   <span id="message_text">{% for error in form.non_field_errors %}{{ error }}{% endfor %}</span>
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endif %}
 {% endfor %}
@@ -25,22 +23,22 @@
   <h6 class="card-header text-muted">
       <ul class="nav nav-tabs card-header-tabs" role="tablist">
         <li class="nav-item">
-          <a id="btn_profile" class="nav-link active" href="#" name="nav_btn" data-toggle="tab">Profiili</a>
+          <a id="btn_profile" class="nav-link active" href="#" name="nav_btn" data-bs-toggle="tab">Profiili</a>
         </li>
         <li class="nav-item">
-          <a id="btn_sports" class="nav-link" href="#" name="nav_btn" data-toggle="tab">Lajit</a>
+          <a id="btn_sports" class="nav-link" href="#" name="nav_btn" data-bs-toggle="tab">Lajit</a>
         </li>
         <li class="nav-item">
-          <a id="btn_zones" class="nav-link" href="#" name="nav_btn" data-toggle="tab">Tehoalueet</a>
+          <a id="btn_zones" class="nav-link" href="#" name="nav_btn" data-bs-toggle="tab">Tehoalueet</a>
         </li>
         <li class="nav-item">
-          <a id="btn_seasons" class="nav-link" href="#" name="nav_btn" data-toggle="tab">Harjoituskaudet</a>
+          <a id="btn_seasons" class="nav-link" href="#" name="nav_btn" data-bs-toggle="tab">Harjoituskaudet</a>
         </li>
         <li class="nav-item">
-          <a id="btn_pw_reset" class="nav-link" href="#" name="nav_btn" data-toggle="tab">Vaihda salasana</a>
+          <a id="btn_pw_reset" class="nav-link" href="#" name="nav_btn" data-bs-toggle="tab">Vaihda salasana</a>
         </li>
         <li class="nav-item">
-          <a id="btn_delete_profile" class="nav-link" href="#" name="nav_btn" data-toggle="tab">Poista profiili</a>
+          <a id="btn_delete_profile" class="nav-link" href="#" name="nav_btn" data-bs-toggle="tab">Poista profiili</a>
         </li>
       </ul>
   </h6>
@@ -50,37 +48,37 @@
       <h5 class="card-title mb-4">PROFIILI</h5>
       <form method="post">{% csrf_token %}
         <fieldset>
-          <div class="form-group row">
-            <label class="col-md-2 col-form-label"><b>{{ user_form.first_name.label }}</b></label>
+          <div class="row mb-2">
+            <label class="col-md-2 form-label"><b>{{ user_form.first_name.label }}</b></label>
             <div class="col-md-2">{{ user_form.first_name|add_class:'form-control' }}</div>
           </div>
-          <div class="form-group row">
-            <label class="col-md-2 col-form-label"><b>{{ user_form.last_name.label }}</b></label>
+          <div class="row mb-2">
+            <label class="col-md-2 form-label"><b>{{ user_form.last_name.label }}</b></label>
             <div class="col-md-2">{{ user_form.last_name|add_class:'form-control' }}</div>
           </div>
-          <div class="form-group row">
-            <label class="col-md-2 col-form-label"><b>{{ user_form.email.label }}</b></label>
+          <div class="row mb-2">
+            <label class="col-md-2 form-label"><b>{{ user_form.email.label }}</b></label>
             <div class="col-md-2">{{ user_form.email|add_class:'form-control' }}</div>
           </div>
         </fieldset>
         <div class="form-actions col-md-6 mt-3">
-          <button type="submit" class="btn btn-success mr-3" name="profile_save" id="profile_save">Tallenna</button>
+          <button type="submit" class="btn btn-success link-light me-3" name="profile_save" id="profile_save">Tallenna</button>
         </div>
       </form>
     </div>
 
     <div name="page" id="sports">
       <h5 class="card-title mb-4">LAJIT</h5>
-      <div class="col-xl-6 pl-0">
+      <div class="col-xl-6 ps-0">
       <form method="post">{% csrf_token %}
         {{ sports_formset.management_form }}
         <div class="table-responsive-lg">
           <table class="table table-sm table-light">
-            <thead class="thead-light">
+            <thead class="table-light">
               <tr>
-                <th class="pl-3 pr-3">{{ sports_formset.0.laji.label }}</th>
-                <th class="pl-3 pr-3">{{ sports_formset.0.laji_nimi.label }}</th>
-                <th class="pl-3 pr-3">{{ sports_formset.0.laji_ryhma.label }}</th>
+                <th class="ps-3 pe-3">{{ sports_formset.0.laji.label }}</th>
+                <th class="ps-3 pe-3">{{ sports_formset.0.laji_nimi.label }}</th>
+                <th class="ps-3 pe-3">{{ sports_formset.0.laji_ryhma.label }}</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -109,9 +107,9 @@
             </tbody>
           </table>
         </div>
-        <button id="sports_add" type="button" class="btn btn-link text-decoration-none mb-1"><i class="fas fa-plus-circle mr-1"></i>Lisää</button>
+        <button id="sports_add" type="button" class="btn btn-link text-decoration-none mb-1"><i class="fas fa-plus-circle me-1"></i>Lisää</button>
         <div class="form-actions mt-3">
-          <button type="submit" class="btn btn-success mr-3" name="sports_save" id="sports_save">Tallenna</button>
+          <button type="submit" class="btn btn-success link-light me-3" name="sports_save" id="sports_save">Tallenna</button>
         </div>
       </form>
       </div>
@@ -119,17 +117,17 @@
 
     <div name="page" id="zones">
       <h5 class="card-title mb-4">TEHOALUEET</h5>
-      <div class="col-xl-5 pl-0">
+      <div class="col-xl-5 ps-0">
       <form method="post">{% csrf_token %}
         {{ zones_formset.management_form }}
         <div class="table-responsive-lg">
           <table class="table table-sm table-light">
-            <thead class="thead-light">
+            <thead class="table-light">
               <tr>
-                <th class="pl-3 pr-3">{{ zones_formset.0.jarj_nro.label }}</th>
-                <th class="pl-3 pr-3">{{ zones_formset.0.tehoalue.label }}</th>
-                <th class="pl-3 pr-3">{{ zones_formset.0.alaraja.label }}</th>
-                <th class="pl-3 pr-3">{{ zones_formset.0.ylaraja.label }}</th>
+                <th class="ps-3 pe-3">{{ zones_formset.0.jarj_nro.label }}</th>
+                <th class="ps-3 pe-3">{{ zones_formset.0.tehoalue.label }}</th>
+                <th class="ps-3 pe-3">{{ zones_formset.0.alaraja.label }}</th>
+                <th class="ps-3 pe-3">{{ zones_formset.0.ylaraja.label }}</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -160,10 +158,10 @@
           </table>
         </div>
         <button id="zones_add" type="button" class="btn btn-link text-decoration-none mb-1">
-          <i class="fas fa-plus-circle mr-1"></i>Lisää
+          <i class="fas fa-plus-circle me-1"></i>Lisää
         </button>
         <div class="form-actions mt-3">
-          <button type="submit" class="btn btn-success mr-3" name="zones_save" id="zones_save">Tallenna</button>
+          <button type="submit" class="btn btn-success link-light me-3" name="zones_save" id="zones_save">Tallenna</button>
         </div>
       </form>
       </div>
@@ -171,16 +169,16 @@
 
     <div name="page" id="seasons">
       <h5 class="card-title mb-4">HARJOITUSKAUDET</h5>
-      <div class="col-xl-4 pl-0">
+      <div class="col-xl-4 ps-0">
       <form method="post">{% csrf_token %}
         {{ seasons_formset.management_form }}
         <div class="table-responsive-lg">
           <table class="table table-sm table-light">
-            <thead class="thead-light">
+            <thead class="table-light">
               <tr>
-                <th class="pl-3 pr-3">{{ seasons_formset.0.kausi.label }}</th>
-                <th class="pl-3 pr-3">{{ seasons_formset.0.alkupvm.label }}</th>
-                <th class="pl-3 pr-3">{{ seasons_formset.0.loppupvm.label }}</th>
+                <th class="ps-3 pe-3">{{ seasons_formset.0.kausi.label }}</th>
+                <th class="ps-3 pe-3">{{ seasons_formset.0.alkupvm.label }}</th>
+                <th class="ps-3 pe-3">{{ seasons_formset.0.loppupvm.label }}</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -209,9 +207,9 @@
             </tbody>
           </table>
         </div>
-        <button id="seasons_add" type="button" class="btn btn-link text-decoration-none mb-1"><i class="fas fa-plus-circle mr-1"></i>Lisää</button>
+        <button id="seasons_add" type="button" class="btn btn-link text-decoration-none mb-1"><i class="fas fa-plus-circle me-1"></i>Lisää</button>
         <div class="form-actions mt-3">
-          <button type="submit" class="btn btn-success mr-3" name="seasons_save" id="seasons_save">Tallenna</button>
+          <button type="submit" class="btn btn-success link-light me-3" name="seasons_save" id="seasons_save">Tallenna</button>
         </div>
       </form>
       </div>
@@ -222,8 +220,8 @@
       <form method="post">{% csrf_token %}
         <fieldset>
           {% for field in pw_form %}
-          <div class="form-group row">
-            <label class="col-md-2 col-form-label"><b>{{ field.label }}</b></label>
+          <div class="row mb-2">
+            <label class="col-md-2 form-label"><b>{{ field.label }}</b></label>
             <div class="col-md-2">{{ field|add_class:'form-control' }}</div>
             {% if field.errors %}
             <div class="col-md-4 text-danger small">{% for error in field.errors %}{{ error }} {% endfor %}</div>
@@ -234,7 +232,7 @@
           {% endfor %}
         </fieldset>
         <div class="form-actions col-md-6 mt-3">
-          <button type="submit" class="btn btn-success mr-3" name="pw_save" id="pw_save">Tallenna</button>
+          <button type="submit" class="btn btn-success link-light me-3" name="pw_save" id="pw_save">Tallenna</button>
         </div>
       </form>
     </div>
@@ -244,7 +242,7 @@
       <form method="post">{% csrf_token %}
         <p>Haluatko varmasti poistaa profiilisi ja menettää kaikki tallentamasi tiedot?</p>
         <div class="form-actions col-md-6 mt-3">
-          <button type="submit" class="btn btn-success mr-3" name="profile_del" id="profile_del">Kyllä</button>
+          <button type="submit" class="btn btn-success link-light me-3" name="profile_del" id="profile_del">Kyllä</button>
         </div>
       </form>
     </div>

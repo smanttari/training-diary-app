@@ -131,6 +131,7 @@ User Uploads Route "${file}"
     Choose File     id_reitti       ${CURDIR}/${file}
 
 User Saves The Training
+    Scroll Element Into View     save
     Click Button      save  
 
 Trainings Form Should Be Open
@@ -138,6 +139,7 @@ Trainings Form Should Be Open
     Title Should Be         Treenipäiväkirja | Lisää harjoitus
 
 User Adds Zone
+    Scroll Element Into View     teho_add
     Click Button    teho_add
 
 User Adds Zone Nro. "${nro}"

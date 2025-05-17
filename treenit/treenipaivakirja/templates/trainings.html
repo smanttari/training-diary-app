@@ -11,26 +11,31 @@
 {% block secondary-header %}KALENTERI{% endblock %}
 
 {% block header-right %}
-    <div class="form-inline">
-        <div class="dropdown">
-            <button class="btn btn-sm btn-primary dropdown-toggle mr-3" type="button" id="export" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-download mr-2"></i>LATAA
-            </button>
-            <div class="dropdown-menu">
-                <button id="export_csv" name="export_csv" class="dropdown-item" type="submit" form="filter_form">CSV
-                <button id="export_xls" name="export_xls" class="dropdown-item" type="submit" form="filter_form">EXCEL
+    <div class="row row-cols-lg-auto">
+        <div class="col">
+            <div class="dropdown">
+                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="export" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-download me-2"></i>LATAA
+                </button>
+                <div class="dropdown-menu">
+                    <button id="export_csv" name="export_csv" class="dropdown-item" type="submit" form="filter_form">CSV
+                    <button id="export_xls" name="export_xls" class="dropdown-item" type="submit" form="filter_form">EXCEL
+                </div>
             </div>
         </div>
-        <div class="dropdown">
-            <button class="btn btn-sm btn-primary dropdown-toggle mr-3" type="button" id="import" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-upload mr-2"></i>HAE
-            </button>
-            <div class="dropdown-menu">
-                <button id="polar" name="polar" class="dropdown-item" type="submit" form="filter_form">POLAR
+        <div class="col">
+            <div class="dropdown">
+                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="import" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-upload me-2"></i>HAE
+                </button>
+                <div class="dropdown-menu">
+                    <button id="polar" name="polar" class="dropdown-item" type="submit" form="filter_form">POLAR
+                </div>
             </div>
         </div>
-        <div>
-        <a id="add_new" href="{% url 'training_add' %}" class="btn btn-sm btn-success" role="button" aria-pressed="true"><i class="fas fa-plus-circle mr-2"></i>LISÄÄ UUSI</a>
+        <div class="col">
+            <a id="add_new" href="{% url 'training_add' %}" class="btn btn-sm btn-success link-light" role="button">
+                <i class="fas fa-plus-circle me-2"></i>LISÄÄ UUSI</a>
         </div>
     </div>
 {% endblock %}
@@ -39,57 +44,65 @@
 
 <div class="mb-4">
 
-    <div class="bg-light border mb-2 p-2 pb-3">
-        <form id="filter_form" class="form-inline mt-2" method="post">{% csrf_token %}
-            <div class="form-group ml-1 mr-1">
-                <label class="text-muted mr-1" for="startdate">Aikaväli:</label>
-                <input class="form-control form-control ml-2" id="startdate" name="startdate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
-            </div>
-            <div class="form-group ml-1 mr-4">
-                <label class="text-muted" for="enddate">-</label>
-                <input class="form-control form-control ml-2" id="enddate" name="enddate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
-            </div>
-            <div class="form-group ml-1 mr-4">
-                <label class="text-muted mr-1" for="sport">Laji:</label>
-                <select class="form-control form-control ml-2" id="sport" name="sport">
-                    {% for group,items in sports.items %}
-                        <option class="font-weight-bold" type="submit" value="{{ group }}" {% if group == sport %} selected {% endif %}>{{ group }}</option>
-                        {% for item in items %}
-                            <option type="submit" value="{{ item }}" {% if item == sport %} selected {% endif %}>&nbsp;&nbsp;&nbsp;{{ item }}</option>
+    <div class="bg-light border mb-2 p-2">
+        <form id="filter_form" class="mt-2" method="post">{% csrf_token %}
+            <div class="row row-cols-lg-auto">
+                <div class="col ms-1 mt-1">
+                    <label class="form-label text-muted">Aikaväli:</label>
+                </div>
+                <div class="col mb-1">
+                    <input class="form-control" id="startdate" name="startdate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
+                </div>
+                <div class="col mt-1">
+                    <label class="form-label text-muted">-</label>
+                </div>
+                <div class="col">
+                    <input class="form-control" id="enddate" name="enddate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
+                </div>
+                <div class="col mt-1">
+                    <label class="form-label text-muted ms-3" for="sport">Laji:</label>
+                </div>
+                <div class="col">
+                    <select class="form-select" id="sport" name="sport">
+                        {% for group,items in sports.items %}
+                            <option class="fw-bold" type="submit" value="{{ group }}" {% if group == sport %} selected {% endif %}>{{ group }}</option>
+                            {% for item in items %}
+                                <option type="submit" value="{{ item }}" {% if item == sport %} selected {% endif %}>&nbsp;&nbsp;&nbsp;{{ item }}</option>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group ml-1 mr-3">
-                <div class="custom-control custom-checkbox" id="restdays">
-                    <input type="checkbox" class="custom-control-input" id="lepo" name="lepo" checked>
-                    <label class="text-muted custom-control-label" for="lepo">Näytä lepopäivät</label>
+                    </select>
+                </div>
+                <div class="col mt-1 ms-3">
+                    <div class="form-check" id="restdays">
+                        <input type="checkbox" class="form-check-input" id="lepo" name="lepo" checked>
+                        <label class="text-muted form-label" for="lepo">Näytä lepopäivät</label>
+                    </div>
                 </div>
             </div>
         </form>
     </div>
 
     <div class="mt-4">
-            <table id="treenit" class="table table-sm table-bordered mt-1 mb-1">
-                <thead class="thead-light">
-                    <tr class="text-nowrap">
+        <table id="treenit" class="table table-sm table-bordered mt-1 mb-1">
+            <thead class="table-light">
+                <tr class="text-nowrap">
+                {% for header in table_headers %}
+                    {% if header == 'details' or header == 'edit' or header == 'delete' %}
+                    <th></th>
+                    {% else %}
+                    <th class="ps-2 pe-4">{{ header }}</th>
+                    {% endif %}
+                {% endfor %}
+                </tr>
+            </thead>
+            <tfoot class="table-light">
+                <tr class="text-nowrap">
                     {% for header in table_headers %}
-                        {% if header == 'details' or header == 'edit' or header == 'delete' %}
-                        <th></th>
-                        {% else %}
-                        <th class="pl-2 pr-4">{{ header }}</th>
-                        {% endif %}
+                    <th></th>
                     {% endfor %}
-                    </tr>
-                </thead>
-                <tfoot class="thead-light">
-                    <tr class="text-nowrap">
-                        {% for header in table_headers %}
-                        <th></th>
-                        {% endfor %}
-                    </tr>
-                </tfoot>
-            </table>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 
 </div>
@@ -293,7 +306,7 @@ var treenitTable = $('#treenit').DataTable({
             targets: [-2],
             responsivePriority: 2,
             orderable: false,
-            className: 'border-right-0 pr-1 pl-2',
+            className: 'border-end-0 pe-1 ps-2',
             render: function(data, type, row, meta){
                 if (data !== ''){
                     let url = "{{ request.path }}" + data + "/modify"
@@ -351,7 +364,7 @@ var treenitTable = $('#treenit').DataTable({
         ],
     fnDrawCallback: function( oSettings ) {
         highlightLepoRows()
-        $("select[name=treenit_length]").removeClass("custom-select");
+        $("select[name=treenit_length]").removeClass("form-select");
     },
     footerCallback: function ( row, data, start, end, display ) {
         var api = this.api(), data;
@@ -443,7 +456,7 @@ function formatDetails(id,details,gpx){
         html += 
             '<h6>Tehot</h6>' +
             '<table class="table table-sm table-bordered" name="details_table">' +
-                '<thead class="thead-light">' +
+                '<thead class="table-light">' +
                 '<tr>' +
                     '<th>Nro</th>' +
                     '<th>Teho</th>' +
@@ -478,7 +491,7 @@ function formatDetails(id,details,gpx){
         html += '<h6>Reitti</h6>'
         html += '<p>'
         html += '<span name="gpx_link">' + gpx_link + '</span>'
-        html += '<span name="map_link" class="ml-4">' + map_link + '</span>'
+        html += '<span name="map_link" class="ms-4">' + map_link + '</span>'
         html += '</p>'
     }
     return html
@@ -509,7 +522,10 @@ function highlightLepoRows(){
         }
     }
     for (i = 0; i < lepoRows.length; i++){
-        rows[lepoRows[i]].style.backgroundColor = '#f0f3ff'
+        var cells = rows[lepoRows[i]].getElementsByTagName("td")
+        for (j = 0; j < cells.length; j++){
+            cells[j].style.backgroundColor = '#f0f3ff'
+        }
     }
 }
 

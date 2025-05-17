@@ -122,6 +122,7 @@ Table Length Is "${length}"
     Select From List By Label       treenit_length      ${length}
 
 Table Page "${2}" Is Selected
+    Scroll Element Into View     class:page-item
     Click Link      2
 
 User Selects "${sport}"
@@ -144,9 +145,11 @@ User Changes Table Length to "${length}"
     Select From List By Label       treenit_length      ${length}
 
 User Goes To Next Page
+    Scroll Element Into View     class:next
     Click Link   Seuraava 
 
 User Goes To Previous Page
+    Scroll Element Into View     class:previous
     Click Link   Edellinen 
 
 User Search For Word "${word}"

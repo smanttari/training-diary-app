@@ -94,7 +94,7 @@ function showForms(prefix, requiredFields){
                     $(this).prop('checked', false)
                 }
             })
-            form.collapse('show')
+            form.show()
         }
         id++ 
     }
@@ -144,7 +144,7 @@ function addForm(prefix, requiredFields){
 // delete form from formset
 function deleteForm(prefix, id, requiredFields){
     let form = $(`#id_${prefix}-${id}`)
-    form.collapse('hide')
+    form.hide()
     form.find('input,select').each (function() {
         let fieldName = $(this).attr('name').split('-')[2]
         if (requiredFields.includes(fieldName)){

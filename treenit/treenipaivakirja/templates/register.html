@@ -14,8 +14,8 @@
     <form method="post">{% csrf_token %}
         <fieldset>
             {% for field in form %}
-            <div class="form-group row">
-              <label class="col-md-2 col-form-label"><b>{{ field.label }}</b></label>
+            <div class="row mt-2">
+              <label class="col-md-2 form-label"><b>{{ field.label }}</b></label>
               <div class="col-md-2">{{ field|add_class:'form-control' }}</div>
               {% if field.errors %}
               <div class="col-md-8 text-danger small">{% for error in field.errors %}{{ error }} {% endfor %}</div>
@@ -26,7 +26,7 @@
             {% endfor %}
         </fieldset>
         <div class="form-actions col-md-6 mt-4">
-            <button type="submit" class="btn btn-primary mr-3" name="ragister" id="id_register">Rekisteröidy</button>
+            <button type="submit" class="btn btn-primary me-3" name="ragister" id="id_register">Rekisteröidy</button>
         </div>
     </form>
 

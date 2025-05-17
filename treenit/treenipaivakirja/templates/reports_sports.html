@@ -13,41 +13,29 @@
 
 {% block content %}
 
-<div class="row mb-2">
-  <div class="col">
-    <div class="float-left">
-      <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown_sport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{sport}}
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          {% for s in sports %}
-          <button name="sport" class="dropdown-item" type="button" value="{{ s }}">{{ s }}</button>
-          {% endfor %}
-        </div>
+<div class="d-flex bd-highlight mb-2">
+  <div class="p-2 flex-grow-1 bd-highlight">
+    <div class="dropdown">
+      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown_sport" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{sport}}
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        {% for s in sports %}
+        <button name="sport" class="dropdown-item" type="button" value="{{ s }}">{{ s }}</button>
+        {% endfor %}
       </div>
     </div>
-    <div class="float-right mt-1">
-      <div class="custom-control custom-radio custom-control-inline">
-        <input 
-          type="radio" 
-          id="year" 
-          name="groupBy" 
-          value="year" 
-          class="custom-control-input" 
-          checked>
-        <label class="custom-control-label" for="year">Vuosittain</label>
-      </div>
-      <div class="custom-control custom-radio custom-control-inline">
-        <input 
-          type="radio" 
-          id="season" 
-          name="groupBy" 
-          value="season" 
-          class="custom-control-input"
-          >
-        <label class="custom-control-label" for="season">Harjoituskausittain</label>
-      </div>
+  </div>
+  <div class="p-2 bd-highlight">
+    <div class="form-check">
+      <input type="radio" id="year" name="groupBy" value="year" class="form-check-input" checked>
+      <label class="form-label" for="year">Vuosittain</label>
+    </div>
+  </div>
+  <div class="p-2 bd-highlight">
+    <div class="form-check">
+      <input type="radio" id="season" name="groupBy" value="season" class="form-check-input">
+      <label class="form-label" for="season">Harjoituskausittain</label>
     </div>
   </div>
 </div>
@@ -56,18 +44,18 @@
   <div class="col-lg-6 mb-3">
     <div class="card">
       <h6 class="card-header text-muted">Harjoitusmäärät
-          <ul class="nav nav-tabs card-header-tabs float-right" role="tablist" id="nav_amount_per_sport">
+          <ul class="nav nav-tabs card-header-tabs float-end" role="tablist" id="nav_amount_per_sport">
             <li class="nav-item">
-              <a class="nav-link active" href="#" data-toggle="tab" id="hours">Tunnit</a>
+              <a class="nav-link active" href="#" data-bs-toggle="tab" id="hours">Tunnit</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" data-toggle="tab" id="kilometers">Kilometrit</a>
+              <a class="nav-link" href="#" data-bs-toggle="tab" id="kilometers">Kilometrit</a>
             </li>
           </ul>
       </h6>
       <div class="card-body">
         <div id="chart_amount_per_sport"></div>
-        <div class="mt-4 ml-4 mr-4" id="table_amount_per_sport"></div>
+        <div class="mt-4 ms-4 me-4" id="table_amount_per_sport"></div>
       </div>
     </div>
   </div>
@@ -76,7 +64,7 @@
       <h6 class="card-header text-muted">Keskisyke ja -vauhti</h6>
       <div class="card-body">
         <div id="chart_avg_per_sport"></div>
-        <div class="mt-4 ml-4 mr-4" id="table_avg_per_sport"></div>
+        <div class="mt-4 ms-4 me-4" id="table_avg_per_sport"></div>
       </div>
     </div>
   </div>
@@ -90,7 +78,7 @@
   document.getElementById("nav_report_sports").classList.add('active')
 
   // enable Bootstrap tooltips
-  $(function () {$('[data-toggle="tooltip"]').tooltip()})
+  $(function () {$('[data-bs-toggle="tooltip"]').tooltip()})
 
   
   // load data

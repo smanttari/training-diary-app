@@ -167,7 +167,7 @@ function drawComboChart(div,dataset,opt){
     }
 
     // enable bootstrap tooltip
-    try {$(function () {$('[data-toggle="tooltip"]').tooltip()})}
+    try {$(function () {$('[data-bs-toggle="tooltip"]').tooltip()})}
     catch(err) {}
 
     // create scales
@@ -563,9 +563,9 @@ function drawComboChart(div,dataset,opt){
         else if (types[serie] == 'line'){
             var elements = svg.selectAll('.dots_' + serie.replace(/[^a-zA-Z0-9-_]/g,'_')).selectAll('.dot')	
         }
-        elements.attr('data-toggle','tooltip')
-            .attr('data-placement','top')
-            .attr('data-html','true')
+        elements.attr('data-bs-toggle','tooltip')
+            .attr('data-bs-placement','top')
+            .attr('data-bs-html','true')
             .attr('title', function(d) {return '<b>' + 
                 (xaxis.date ? formatDate(new Date(d3.select(this).attr('category'))) : d3.select(this).attr('category')) + '</b></br>' + 
                 (tooltip.prefix || '') +
@@ -697,7 +697,7 @@ function drawPieChart(div,dataset,opt){
     let sumSeries = d3.sum(data, d => d.series)
 
     // enable bootstrap tooltip
-    try {$(function () {$('[data-toggle="tooltip"]').tooltip()})}
+    try {$(function () {$('[data-bs-toggle="tooltip"]').tooltip()})}
     catch(err) {}
     
     // sort data by value
@@ -781,8 +781,8 @@ function drawPieChart(div,dataset,opt){
     // add tooltips
     if (tooltip){
         svg.selectAll('.slice')		
-        .attr('data-toggle','tooltip')
-        .attr('data-placement', d => {
+        .attr('data-bs-toggle','tooltip')
+        .attr('data-bs-placement', d => {
             if (d.startAngle < Math.PI) {return 'right'}
             else {return 'left'}
             })

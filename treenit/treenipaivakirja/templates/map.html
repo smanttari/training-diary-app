@@ -7,39 +7,49 @@
 
 {% block content %}
 
-<div class="bg-light border mb-2 p-2 pb-3">
-    <form id="map_form" class="form-inline mt-2" method="get">
-        <div class="form-group ml-1 mr-1">
-            <label class="text-muted mr-1" for="startdate">Aikaväli:</label>
-            <input class="form-control form-control ml-2" id="startdate" name="startdate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
-        </div>
-        <div class="form-group ml-1 mr-4">
-            <label class="text-muted" for="enddate">-</label>
-            <input class="form-control form-control ml-2" id="enddate" name="enddate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
-        </div>
-        <div class="form-group ml-1 mr-4">
-            <label class="text-muted mr-1" for="sport">Laji:</label>
-            <select class="form-control form-control ml-2" id="sport" name="sport">
-                {% for group,items in sports.items %}
-                    <option class="font-weight-bold" type="submit" value="{{ group }}" {% if group == sport %} selected {% endif %}>{{ group }}</option>
-                    {% for item in items %}
-                        <option type="submit" value="{{ item }}" {% if item == sport %} selected {% endif %}>&nbsp;&nbsp;&nbsp;{{ item }}</option>
+<div class="bg-light border mb-2 p-2">
+    <form id="map_form" class="mt-2" method="get">
+        <div class="row row-cols-lg-auto">
+            <div class="col ms-1 mt-1">
+                <label class="form-label text-muted">Aikaväli:</label>
+            </div>
+            <div class="col mb-1">
+                <input class="form-control" id="startdate" name="startdate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
+            </div>
+            <div class="col mt-1">
+                <label class="form-label text-muted">-</label>
+            </div>
+            <div class="col">
+                <input class="form-control" id="enddate" name="enddate" pattern="\d{1,2}.\d{1,2}.\d{4}" placeholder="dd.mm.yyyy" required/>
+            </div>
+            <div class="col mt-1 mb-1">
+                <label class="form-label text-muted ms-3" for="sport">Laji:</label>
+            </div>
+            <div class="col">
+                <select class="form-select ms-2" id="sport" name="sport">
+                    {% for group,items in sports.items %}
+                        <option class="fw-bold" type="submit" value="{{ group }}" {% if group == sport %} selected {% endif %}>{{ group }}</option>
+                        {% for item in items %}
+                            <option type="submit" value="{{ item }}" {% if item == sport %} selected {% endif %}>&nbsp;&nbsp;&nbsp;{{ item }}</option>
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group ml-1 mr-3">
-            <label class="text-muted mr-1" for="training">Harjoitus:</label>
-            <select class="form-control form-control ml-2" id="training" name="training">
-                {% for key, value in routes.items %}
-                    <option type="submit" value="{{ key }}" {% if key == training_id %} selected {% endif %}>{{ value.label }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col">
-            <div class="form-actions ml-3 float-right">
-                <button type="submit" id="show" name="show" class="btn btn-success"
-                {% if training_id == -1 %} disabled {% endif %}>Näytä</button>
+                </select>
+            </div>
+            <div class="col mt-1">
+                <label class="form-label text-muted ms-3" for="training">Harjoitus:</label>
+            </div>
+            <div class="col mb-1">
+                <select class="form-select ms-2" id="training" name="training">
+                    {% for key, value in routes.items %}
+                        <option type="submit" value="{{ key }}" {% if key == training_id %} selected {% endif %}>{{ value.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col">
+                <div class="form-actions ms-3">
+                    <button type="submit" id="show" name="show" class="btn btn-success link-light"
+                    {% if training_id == -1 %} disabled {% endif %}>Näytä</button>
+                </div>
             </div>
         </div>
     </form>

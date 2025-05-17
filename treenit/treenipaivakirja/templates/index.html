@@ -15,69 +15,75 @@
 
 <div class="container mb-5 mt-3">
 
-  <div class="jumbotron bg-light pt-4 pb-4 border">
+  <div class="bg-light pt-4 pb-4 ps-4 pe-4 border">
     <h1 class="display-4">Hei, {% if user.first_name %}{{ user.first_name}}{% else %}{{ user.username }}{% endif %}!</h1>
     <p class="lead">Tänään on {{current_day}}</p>
     
-    <div class="card-deck pt-4 pb-3">
-      <div class="card shadow-sm bg-white rounded">
-        <div class="card-body pr-5 pl-5 text-center">
-          <h6 class="card-title mb-1">Treenit kuluvana vuonna</h6>
-          <ul class="list-inline mb-1">
-            <li class="list-inline-item"><h1 class="card-text display-4 text-primary">{{ hours_current_year }}</h1></li>
-            <li class="list-inline-item">tuntia</li> 
-          </ul>
-          {% if hours_change > 0 %}
-          <p class="card-text text-success">
-            <i class="fas fa-caret-up mr-1"></i>
-            {{ hours_change }}
-          {% else %} 
-          <p class="card-text text-danger">
-            <i class="fas fa-caret-down mr-1"></i>
-            {{ hours_change }}
-          {% endif %}
-            <small class="text-muted">verrattuna vuoden takaiseen</small>
-          </p>
-        </div>
-      </div>
-      <div class="card shadow-sm bg-white rounded">
-        <div class="card-body pr-5 pl-5 text-center">
-          <h6 class="card-title mb-1">Viikoittainen treenimäärä</h6>
-          <ul class="list-inline mb-1">
-            <li class="list-inline-item"><h1 class="card-text display-4 text-primary">{{ hours_per_week_current_year }}</h1></li>
-            <li class="list-inline-item">tuntia/vko</li> 
-          </ul>
-          {% if hours_per_week_change > 0 %}
-          <p class="card-text text-success">
-            <i class="fas fa-caret-up mr-1"></i>
-            {{ hours_per_week_change }}
-          {% else %} 
-          <p class="card-text text-danger">
-            <i class="fas fa-caret-down mr-1"></i>
-            {{ hours_per_week_change }}
-          {% endif %}
-            <small class="text-muted">verrattuna viime vuoteen</small>
-          </p>
-        </div>
-      </div>
-      <div class="card shadow-sm bg-white rounded">
-        <div class="card-body pr-5 pl-5 text-center">
-          <h6 class="card-title mb-1">Treenifiilis keskimäärin</h6>
-          <ul class="list-inline mb-1">
-              <li class="list-inline-item"><h1 class="card-text display-4 text-primary">{{ feeling_current_period }}</h1></li>
-              <li class="list-inline-item">/viimeiset 14 vrk</li> 
+    <div class="row pt-4 pb-3">
+      <div class="col-sm-4">
+        <div class="card shadow-sm bg-white rounded">
+          <div class="card-body pe-5 ps-5 text-center">
+            <h6 class="card-title mb-1">Treenit kuluvana vuonna</h6>
+            <ul class="list-inline mb-1">
+              <li class="list-inline-item"><h1 class="card-text display-4 text-primary">{{ hours_current_year }}</h1></li>
+              <li class="list-inline-item">tuntia</li> 
             </ul>
-            {% if feeling_change > 0 %}
+            {% if hours_change > 0 %}
             <p class="card-text text-success">
-              <i class="fas fa-caret-up mr-1"></i>
-              {{ feeling_change }}
+              <i class="fas fa-caret-up me-1"></i>
+              {{ hours_change }}
             {% else %} 
             <p class="card-text text-danger">
-              <i class="fas fa-caret-down mr-1"></i>
-              {{ feeling_change }}
+              <i class="fas fa-caret-down me-1"></i>
+              {{ hours_change }}
             {% endif %}
-            <small class="text-muted">verrattuna edeltävään jaksoon</small>
-          </p>
+              <small class="text-muted">verrattuna vuoden takaiseen</small>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="card shadow-sm bg-white rounded">
+          <div class="card-body pe-5 ps-5 text-center">
+            <h6 class="card-title mb-1">Viikoittainen treenimäärä</h6>
+            <ul class="list-inline mb-1">
+              <li class="list-inline-item"><h1 class="card-text display-4 text-primary">{{ hours_per_week_current_year }}</h1></li>
+              <li class="list-inline-item">tuntia/vko</li> 
+            </ul>
+            {% if hours_per_week_change > 0 %}
+            <p class="card-text text-success">
+              <i class="fas fa-caret-up me-1"></i>
+              {{ hours_per_week_change }}
+            {% else %} 
+            <p class="card-text text-danger">
+              <i class="fas fa-caret-down me-1"></i>
+              {{ hours_per_week_change }}
+            {% endif %}
+              <small class="text-muted">verrattuna viime vuoteen</small>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="card shadow-sm bg-white rounded">
+          <div class="card-body pe-5 ps-5 text-center">
+            <h6 class="card-title mb-1">Treenifiilis keskimäärin</h6>
+            <ul class="list-inline mb-1">
+                <li class="list-inline-item"><h1 class="card-text display-4 text-primary">{{ feeling_current_period }}</h1></li>
+                <li class="list-inline-item">/viimeiset 14 vrk</li> 
+              </ul>
+              {% if feeling_change > 0 %}
+              <p class="card-text text-success">
+                <i class="fas fa-caret-up me-1"></i>
+                {{ feeling_change }}
+              {% else %} 
+              <p class="card-text text-danger">
+                <i class="fas fa-caret-down me-1"></i>
+                {{ feeling_change }}
+              {% endif %}
+              <small class="text-muted">verrattuna edeltävään jaksoon</small>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -85,43 +91,53 @@
     <hr class="mt-5 mb-4">
 
     <p class="lead mb-4">Toiminnot</p>
-    <div class="card-deck pb-5">
-      <div class="card shadow-sm bg-white rounded pb-4 pr-5 pl-5 mr-4">
-        <div class="card-body p-4 pt-5 text-center">
-          <a id="calendar_icon" href="{% url 'trainings' %}">
-            <i class="far fa-calendar-alt fa-5x"></i>
-          </a>
-          <h5 class="card-title mt-3">Harjoituskalenteri</h5>
-          <p class="card-text text-muted">Tarkastele harjoitteluhistoriaasi. Muokkaa tai lisää uusia harjoituksia.</p>
+
+    <div class="row pb-5">
+      <div class="col-sm-6">
+        <div class="card shadow-sm bg-white rounded pb-4 pe-5 ps-5 me-4">
+          <div class="card-body p-4 pt-5 text-center">
+            <a id="calendar_icon" href="{% url 'trainings' %}">
+              <i class="far fa-calendar-alt fa-5x"></i>
+            </a>
+            <h5 class="card-title mt-3">Harjoituskalenteri</h5>
+            <p class="card-text text-muted">Tarkastele harjoitteluhistoriaasi. Muokkaa tai lisää uusia harjoituksia.</p>
+          </div>
         </div>
       </div>
-      <div class="card shadow-sm bg-white rounded pb-4 pr-5 pl-5">
-        <div class="card-body p-4 pt-5 text-center">
-          <a id="chart_icon" href="{% url 'reports_amounts' %}">
-            <i class="fas fa-chart-line fa-5x"></i>
-          </a>
-          <h5 class="card-title mt-3">Harjoitusraportit</h5>
-          <p class="card-text text-muted">Seuraa harjoitusmäärien ja laadun kehitystä. Huomaa edistyksesi.</p>
+      <div class="col-sm-6">
+        <div class="card shadow-sm bg-white rounded pb-4 pe-5 ps-5">
+          <div class="card-body p-4 pt-5 text-center">
+            <a id="chart_icon" href="{% url 'reports_amounts' %}">
+              <i class="fas fa-chart-line fa-5x"></i>
+            </a>
+            <h5 class="card-title mt-3">Harjoitusraportit</h5>
+            <p class="card-text text-muted">Seuraa harjoitusmäärien ja laadun kehitystä. Huomaa edistyksesi.</p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="card-deck pb-4">
-      <div class="card shadow-sm bg-white rounded pb-4 pr-5 pl-5 mr-4">
-        <div class="card-body p-4 pt-5 text-center">
-          <a id="settings_icon" href="{% url 'recovery' %}">
-            <i class="fas fa-procedures fa-5x"></i>
-          </a>
-          <h5 class="card-title mt-3">Palautuminen</h5>
-          <p class="card-text text-muted">Seuraa palautumistasi. Pidä treenit ja lepo tasapainossa.</p>
+
+    <div class="row pb-4">
+      <div class="col-sm-6">
+        <div class="card shadow-sm bg-white rounded pb-4 pe-5 ps-5 me-4">
+          <div class="card-body p-4 pt-5 text-center">
+            <a id="settings_icon" href="{% url 'recovery' %}">
+              <i class="fas fa-procedures fa-5x"></i>
+            </a>
+            <h5 class="card-title mt-3">Palautuminen</h5>
+            <p class="card-text text-muted">Seuraa palautumistasi. Pidä treenit ja lepo tasapainossa.</p>
+          </div>
         </div>
       </div>
-      <div class="card shadow-sm bg-white rounded pb-4 pr-5 pl-5">
-        <div class="card-body p-4 pt-5 text-center">
-          <a id="settings_icon" href="{% url 'settings' %}">
-            <i class="fas fa-cog fa-5x"></i>
-          </a>
-          <h5 class="card-title mt-3">Asetukset</h5>
-          <p class="card-text text-muted">Määrittele lajit ja harjoituskaudet. Aseta yksilölliset tehoalueesi.</p>
+      <div class="col-sm-6">
+        <div class="card shadow-sm bg-white rounded pb-4 pe-5 ps-5">
+          <div class="card-body p-4 pt-5 text-center">
+            <a id="settings_icon" href="{% url 'settings' %}">
+              <i class="fas fa-cog fa-5x"></i>
+            </a>
+            <h5 class="card-title mt-3">Asetukset</h5>
+            <p class="card-text text-muted">Määrittele lajit ja harjoituskaudet. Aseta yksilölliset tehoalueesi.</p>
+          </div>
         </div>
       </div>
     </div>

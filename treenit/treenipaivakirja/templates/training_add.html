@@ -10,12 +10,12 @@
     <form method="post" enctype="multipart/form-data">{% csrf_token %}
         <fieldset>
             <div class="row">
-                <div class="col-md-10 border-bottom border-primary ml-3 pl-0 mb-4">
+                <div class="col-md-10 border-bottom border-primary ms-3 ps-0 mb-4">
                     <h5>Perustiedot</h5>
                 </div>
             </div>
             {% include "training_form.html" %}
-            <div class="form-group row">
+            <div class="row mt-2">
                 <label class="col-md-2 col-xl-1 col-form-label"><b>{{ harjoitus_form.reitti.label }}</b></label> 
                 <div class="col-md-4">{{ harjoitus_form.reitti }}</div>
                 <div class="col-md-4 text-danger">
@@ -23,15 +23,15 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-10 border-bottom border-primary ml-3 pl-0 mt-4 mb-4">
+                <div class="col-md-10 border-bottom border-primary ms-3 ps-0 mt-4 mb-4">
                     <h5>Tehot</h5>
                 </div>
             </div>
             {% include "zone_form.html" %}
         </fieldset>
         <div class="form-actions mt-5">
-            <button type="submit" id="save" name="save" class="btn btn-success mr-3">Tallenna</button>
-            <a id="cancel" class="btn btn-danger" href="{% url 'trainings' %}" role="button">Peruuta</a>
+            <button type="submit" id="save" name="save" class="btn btn-success link-light me-3">Tallenna</button>
+            <a id="cancel" class="btn btn-danger link-light" href="{% url 'trainings' %}" role="button">Peruuta</a>
         </div>
     </form>
 </div>

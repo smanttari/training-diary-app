@@ -1,11 +1,11 @@
-<div class="form-group row">
-    <label class="col-md-2 col-xl-1 col-form-label"><b>{{ harjoitus_form.pvm.label }}</b></label> 
+<div class="row">
+    <label class="col-md-2 col-xl-1 form-label"><b>{{ harjoitus_form.pvm.label }}</b></label> 
     <div class="col-md-2 mb-1">{{ harjoitus_form.pvm }}</div>
     <div class="col-md-2">
         {% for radio in harjoitus_form.vuorokaudenaika %}
-            <div id="radio_vuorokaudenaika_{{ forloop.counter0 }}" class="custom-control custom-radio">
+            <div id="radio_vuorokaudenaika_{{ forloop.counter0 }}" class="form-check">
                 {{ radio.tag }}
-                <label class="custom-control-label" for="id_vuorokaudenaika_{{ forloop.counter0 }}">{{ radio.choice_label }}</label>
+                <label class="form-check-label" for="id_vuorokaudenaika_{{ forloop.counter0 }}">{{ radio.choice_label }}</label>
             </div>
         {% endfor %}
     </div>
@@ -14,50 +14,57 @@
         {% for error in harjoitus_form.vuorokaudenaika.errors %}{{ error }}{% endfor %}
     </div>
 </div>
-<div class="form-group row">
-    <label class="col-md-2 col-xl-1 col-form-label"><b>{{ harjoitus_form.laji.label }}</b></label> 
+<div class="row mt-1">
+    <label class="col-md-2 col-xl-1 form-label"><b>{{ harjoitus_form.laji.label }}</b></label> 
     <div class="col-md-2">{{ harjoitus_form.laji }}</div>
-    <div class="col-md-2"><a class="nav-link pl-0" href="{% url 'settings' %}?page=sports"><i class="fas fa-plus-circle mr-1"></i>Lisää laji</a></div>
+    <div class="col-md-2 mt-1"><a class="nav-link ps-0" href="{% url 'settings' %}?page=sports"><i class="fas fa-plus-circle me-1"></i>Lisää laji</a></div>
     <div class="col-md-2 text-danger">{% for error in harjoitus_form.laji.errors %}{{ error }}{% endfor %}</div>
-    <label class="col-md-1 col-form-label text-muted">{{ harjoitus_form.polar_sport.label }}</label>
+    <label class="col-md-1 form-label text-muted">{{ harjoitus_form.polar_sport.label }}</label>
     <div class="col-md-2">{{ harjoitus_form.polar_sport }}</div>
 </div>
-<div class="form-group row">
-    <label class="col-md-2 col-xl-1 col-form-label"><b>Kesto</b></label> 
-    <div class="input-group col-md-3 col-xl-2">
-        {{ harjoitus_form.kesto_h }}
-        {{ harjoitus_form.kesto_min }}
-        <div class="input-group-prepend"><span class="input-group-text">h</span></div>
+<div class="row mt-2">
+    <label class="col-md-2 col-xl-1 form-label"><b>Kesto</b></label> 
+    <div class="col-md-3 col-xl-2">
+        <div class="input-group">
+            {{ harjoitus_form.kesto_h }}
+            {{ harjoitus_form.kesto_min }}
+            <span class="input-group-text">h</span>
+        </div>
     </div>
     <div class="col-md-4 text-danger">
         {% for error in harjoitus_form.kesto_h.errors %}{{ error }}{% endfor %}
         {% for error in harjoitus_form.kesto_min.errors %}{{ error }}{% endfor %}
     </div>
 </div>
-<div class="form-group row">
-    <label class="col-md-2 col-xl-1 col-form-label"><b>{{ harjoitus_form.keskisyke.label }}</b></label> 
+<div class="row mt-2">
+    <label class="col-md-2 col-xl-1 form-label"><b>{{ harjoitus_form.keskisyke.label }}</b></label> 
     <div class="col-md-2">{{ harjoitus_form.keskisyke }}</div>
     <div class="col-md-4 text-danger">{% for error in harjoitus_form.keskisyke.errors %}{{ error }}{% endfor %}</div>
 </div>
-<div class="form-group row">
-    <label class="col-md-2 col-xl-1 col-form-label"><b>Matka</b></label> 
-    <div class="input-group col-md-3 col-xl-2">
-        {{ harjoitus_form.matka }}
-        <div class="input-group-prepend"><span class="input-group-text">km</span></div>
+<div class="row mt-2">
+    <label class="col-md-2 col-xl-1 form-label"><b>Matka</b></label> 
+    <div class="col-md-3 col-xl-2">
+        <div class="input-group">
+            {{ harjoitus_form.matka }}
+            <span class="input-group-text">km</span>
+        </div>
     </div>
     <div class="col-md-4 text-danger">{% for error in harjoitus_form.matka.errors %}{{ error }}{% endfor %}</div>
 </div>
-<div class="form-group row">
-    <label class="col-md-2 col-xl-1 col-form-label"><b>Vauhti</b></label> 
-    <div class="input-group col-md-3 col-xl-2">
-        {{ harjoitus_form.vauhti_km_h }}
-        <div class="input-group-prepend"><span class="input-group-text">km/h</span></div>
+<div class="row mt-2">
+    <label class="col-md-2 col-xl-1 form-label"><b>Vauhti</b></label> 
+    <div class="col-md-3 col-xl-2 mb-1">
+        <div class="input-group">
+            {{ harjoitus_form.vauhti_km_h }}
+            <span class="input-group-text">km/h</span>
+        </div>
     </div>
-    <label class="col-form-label ml-2 mr-2"><b>tai</b></label> 
-    <div class="input-group col-md-3">
-        {{ harjoitus_form.vauhti_min }}
-        {{ harjoitus_form.vauhti_s }}
-        <div class="input-group-prepend"><span class="input-group-text">min/km</span></div>
+    <div class="col-md-4 col-xl-3">
+        <div class="input-group">
+            {{ harjoitus_form.vauhti_min }}
+            {{ harjoitus_form.vauhti_s }}
+            <span class="input-group-text">min/km</span>
+        </div>
     </div>
     <div class="col-md-4 text-danger">
         {% for error in harjoitus_form.vauhti_km_h.errors %}{{ error }}{% endfor %}
@@ -65,26 +72,28 @@
         {% for error in harjoitus_form.vauhti_s.errors %}{{ error }}{% endfor %}
     </div>
 </div>
-<div class="form-group row">
-    <label class="col-md-2 col-xl-1 col-form-label"><b>{{ harjoitus_form.kalorit.label }}</b></label> 
+<div class="row mt-2">
+    <label class="col-md-2 col-xl-1 form-label"><b>{{ harjoitus_form.kalorit.label }}</b></label> 
     <div class="col-md-2">{{ harjoitus_form.kalorit }}</div>
     <div class="col-md-4 text-danger">{% for error in harjoitus_form.kalorit.errors %}{{ error }}{% endfor %}</div>
 </div>
-<div class="form-group row">
-    <label class="col-md-2 col-xl-1 col-form-label"><b>Nousu</b></label> 
-    <div class="input-group col-md-2">
-        {{ harjoitus_form.nousu }}
-        <div class="input-group-prepend"><span class="input-group-text">m</span></div>
+<div class="row mt-2">
+    <label class="col-md-2 col-xl-1 form-label"><b>Nousu</b></label> 
+    <div class="col-md-2">
+        <div class="input-group">
+            {{ harjoitus_form.nousu }}
+            <span class="input-group-text">m</span>
+        </div>
     </div>
     <div class="col-md-4 text-danger">{% for error in harjoitus_form.nousu.errors %}{{ error }}{% endfor %}</div>
 </div>
-<div class="form-group row">
-    <label class="col-md-2 col-xl-1 col-form-label"><b>{{ harjoitus_form.tuntuma.label }}</b></label> 
+<div class="row mt-2">
+    <label class="col-md-2 col-xl-1 form-label"><b>{{ harjoitus_form.tuntuma.label }}</b></label> 
     <div class="col-md-2">{{ harjoitus_form.tuntuma }}</div>
     <div class="col-md-4 text-danger">{% for error in harjoitus_form.tuntuma.errors %}{{ error }}{% endfor %}</div>
 </div>
-<div class="form-group row">
-    <label class="col-md-2 col-xl-1 col-form-label"><b>{{ harjoitus_form.kommentti.label }}</b></label> 
+<div class="row mt-2">
+    <label class="col-md-2 col-xl-1 form-label"><b>{{ harjoitus_form.kommentti.label }}</b></label> 
     <div class="col-md-4">{{ harjoitus_form.kommentti }}</div>
     <div class="col-md-4 text-danger">{% for error in harjoitus_form.kommentti.errors %}{{ error }}{% endfor %}</div>
 </div>

@@ -18,12 +18,12 @@
   <div class="col-lg-6 mb-3">
     <div class="card">
       <h6 class="card-header text-muted">Harjoitusmäärät vuosittain
-          <ul class="nav nav-tabs card-header-tabs float-right" role="tablist">
+          <ul class="nav nav-tabs card-header-tabs float-end" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" href="#" data-toggle="tab" id="hours_per_year">Tunnit</a>
+              <a class="nav-link active" href="#" data-bs-toggle="tab" id="hours_per_year">Tunnit</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" data-toggle="tab" id="kilometers_per_year">Kilometrit</a>
+              <a class="nav-link" href="#" data-bs-toggle="tab" id="kilometers_per_year">Kilometrit</a>
             </li>
           </ul>
       </h6>
@@ -36,12 +36,12 @@
   <div class="col-lg-6 mb-3">
     <div class="card">
       <h6 class="card-header text-muted">Harjoitusmäärät kausittain
-          <ul class="nav nav-tabs card-header-tabs float-right" role="tablist">
+          <ul class="nav nav-tabs card-header-tabs float-end" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" href="#" data-toggle="tab" id="hours_per_season">Tunnit</a>
+              <a class="nav-link active" href="#" data-bs-toggle="tab" id="hours_per_season">Tunnit</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" data-toggle="tab" id="kilometers_per_season">Kilometrit</a>
+              <a class="nav-link" href="#" data-bs-toggle="tab" id="kilometers_per_season">Kilometrit</a>
             </li>
           </ul>
       </h6>
@@ -59,16 +59,16 @@
     <div class="card">
       <h6 class="card-header text-muted">
         <span id="header_hours_per_year">Harjoitusmäärät kuukausittain</span>
-        <ul class="nav nav-tabs card-header-tabs float-right" role="tablist" id="nav_hours_per_year">
+        <ul class="nav nav-tabs card-header-tabs float-end" role="tablist" id="nav_hours_per_year">
           <li class="nav-item">
-            <a class="nav-link active" href="#" data-toggle="tab" id="month">Kuukausi</a>
+            <a class="nav-link active" href="#" data-bs-toggle="tab" id="month">Kuukausi</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="tab" id="week">Viikko</a>
+            <a class="nav-link" href="#" data-bs-toggle="tab" id="week">Viikko</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link active dropdown-toggle" id="dropdown_hours_per_year" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{years.0}}</a>
-            <div class="dropdown-menu dropdown-menu-right">
+            <a class="nav-link active dropdown-toggle" id="dropdown_hours_per_year" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{years.0}}</a>
+            <div class="dropdown-menu dropdown-menu-end">
               {% for v in years %}
               <button name="years" class="dropdown-item" type="button" value="{{ v }}">{{ v }}</button>
               {% endfor %}
@@ -86,16 +86,16 @@
     <div class="card">
       <h6 class="card-header text-muted">
         <span id="header_hours_per_sport">Harjoitusmäärät lajeittain</span>
-        <ul class="nav nav-tabs card-header-tabs float-right" role="tablist" id="nav_hours_per_sport">
+        <ul class="nav nav-tabs card-header-tabs float-end" role="tablist" id="nav_hours_per_sport">
           <li class="nav-item">
-            <a class="nav-link active" href="#" data-toggle="tab" id="nav_sport">Lajit</a>
+            <a class="nav-link active" href="#" data-bs-toggle="tab" id="nav_sport">Lajit</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="tab" id="nav_sport_group">Lajiryhmät</a>
+            <a class="nav-link" href="#" data-bs-toggle="tab" id="nav_sport_group">Lajiryhmät</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link active dropdown-toggle" id="dropdown_hours_per_sport" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{years.0}}</a>
-            <div class="dropdown-menu dropdown-menu-right">
+            <a class="nav-link active dropdown-toggle" id="dropdown_hours_per_sport" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{years.0}}</a>
+            <div class="dropdown-menu dropdown-menu-end">
               {% for v in years %}
               <button name="sport_years" class="dropdown-item" type="button" value="{{ v }}">{{ v }}</button>
               {% endfor %}
@@ -119,7 +119,7 @@
   document.getElementById("nav_report_amounts").classList.add('active')
 
   // enable Bootstrap tooltips
-  $(function () {$('[data-toggle="tooltip"]').tooltip()})
+  $(function () {$('[data-bs-toggle="tooltip"]').tooltip()})
 
   
   // load data

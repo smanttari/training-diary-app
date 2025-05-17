@@ -69,7 +69,9 @@ Distance Should Be "${distance}" For The Latest Training
     Table Cell Should Contain    treenit     2       7       ${distance}
 
 User Saves Changes
+    Scroll Element Into View     save
     Click Button      save 
 
 User Cancels Changes
+    Scroll Element Into View     cancel
     Click Link      cancel 

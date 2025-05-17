@@ -14,7 +14,7 @@ class HarjoitusForm(forms.ModelForm):
     class Meta:
         model = Harjoitus
         widgets = {
-            'vuorokaudenaika': forms.RadioSelect(attrs={'class': 'custom-control-input'}),
+            'vuorokaudenaika': forms.RadioSelect(attrs={'class': 'form-check-input'}),
             'kommentti': forms.Textarea(attrs={'rows': 3}),
         }
         fields = [
@@ -40,7 +40,9 @@ class HarjoitusForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super(HarjoitusForm, self).__init__(*args, **kwargs)
         for f in self.visible_fields():
-            if f.name != 'vuorokaudenaika' and f.name != 'reitti':
+            if f.name == 'laji' or f.name == 'tuntuma':
+                f.field.widget.attrs['class'] = 'form-select'
+            elif f.name != 'vuorokaudenaika' and f.name != 'reitti':
                 f.field.widget.attrs['class'] = 'form-control'
         self.fields['laji'].queryset = Laji.objects.filter(user=user)
 
@@ -83,7 +85,10 @@ class TehoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TehoForm, self).__init__(*args, **kwargs)
         for f in self.visible_fields():
-            f.field.widget.attrs['class'] = 'form-control'
+            if f.name == 'tehoalue':
+                f.field.widget.attrs['class'] = 'form-select'
+            else:
+                f.field.widget.attrs['class'] = 'form-control'
 
 
 class TehoalueForm(forms.ModelForm):
@@ -152,7 +157,7 @@ class HarjoitusFormSet(forms.BaseFormSet):
             'readonly':True
             }))
         form.fields['has_route'] = forms.BooleanField(
-            widget=forms.CheckboxInput(attrs={'class': 'custom-control-input'}),
+            widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             label='Tallenna reitti',
             required=False
             )
