@@ -1,7 +1,7 @@
 from django import forms
 from treenipaivakirja.models import Harjoitus, Teho, Laji, Tehoalue, Kausi
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm, PasswordChangeForm
 
 
 
@@ -55,6 +55,11 @@ class LajiForm(forms.ModelForm):
             'laji_nimi',
             'laji_ryhma'
             ]
+        widgets = {
+            'laji': forms.TextInput(attrs={'class': 'form-control'}),
+            'laji_nimi': forms.TextInput(attrs={'class': 'form-control'}),
+            'laji_ryhma': forms.TextInput(attrs={'class': 'form-control'})
+        }
 
 
 class TehoForm(forms.ModelForm):
@@ -100,6 +105,12 @@ class TehoalueForm(forms.ModelForm):
             'alaraja',
             'ylaraja'
             ]
+        widgets = {
+            'jarj_nro': forms.NumberInput(attrs={'class': 'form-control'}),
+            'tehoalue': forms.TextInput(attrs={'class': 'form-control'}),
+            'alaraja': forms.NumberInput(attrs={'class': 'form-control'}),
+            'ylaraja': forms.NumberInput(attrs={'class': 'form-control'})
+        }
 
 
 class UserForm(UserChangeForm):
@@ -111,6 +122,19 @@ class UserForm(UserChangeForm):
             'email', 
             'password'
             ]
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'})
+        }
+
+
+class PwChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(PwChangeForm, self).__init__(*args, **kwargs)
+        for f in self.visible_fields():
+            f.field.widget.attrs['class'] = 'form-control'
 
 
 class RegistrationForm(UserCreationForm):
@@ -128,6 +152,11 @@ class RegistrationForm(UserCreationForm):
             'password1', 
             'password2'
             ]
+        
+    def __init__(self, *args, **kwargs):
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+        for f in self.visible_fields():
+            f.field.widget.attrs['class'] = 'form-control'
 
 
 class KausiForm(forms.ModelForm):
@@ -138,6 +167,11 @@ class KausiForm(forms.ModelForm):
             'alkupvm',
             'loppupvm'
             ]
+        widgets = {
+            'kausi': forms.TextInput(attrs={'class': 'form-control'}),
+            'alkupvm': forms.DateInput(attrs={'class': 'form-control date-picker picker-start'}),
+            'loppupvm': forms.DateInput(attrs={'class': 'form-control date-picker picker-end'})
+        }
 
     def clean(self):
         cleaned_data = super().clean()

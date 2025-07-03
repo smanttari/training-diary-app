@@ -1,5 +1,4 @@
 {% extends "base_generic.html" %}
-{% load widget_tweaks %}
 {% load static %}
 
 {% block head %}
@@ -28,11 +27,11 @@
     <fieldset>
     <div class="row">
         <label class="col-md-2 form-label"><b>{{ form.username.label_tag }}</b></label>
-        <div class="col-md-2">{{ form.username|add_class:'form-control'  }}</div>
+        <div class="col-md-2">{{ form.username }}</div>
     </div>
     <div class="row mt-2">
         <label class="col-md-2 form-label"><b>{{ form.password.label_tag }}</b></label>
-        <div class="col-md-2">{{ form.password|add_class:'form-control' }}</div>
+        <div class="col-md-2">{{ form.password }}</div>
     </div>
     </fieldset>
     <div class="row mt-3">
@@ -53,5 +52,10 @@
   setTimeout(() => $(".alert").alert('close'), 4000)
 </script>
 {% endif %}
+
+<script type="text/javascript">
+  $('input[name="username"]').addClass('form-control')
+  $('input[name="password"]').addClass('form-control')
+</script>
 
 {% endblock %}

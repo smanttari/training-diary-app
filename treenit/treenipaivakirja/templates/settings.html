@@ -2,9 +2,6 @@
 {% block title %}Treenipäiväkirja | Asetukset{% endblock %}
 {% block header %}ASETUKSET{% endblock %}
 
-{% load widget_tweaks %}
-
-
 {% block content %}
 
 {% for form in seasons_formset %}
@@ -50,15 +47,15 @@
         <fieldset>
           <div class="row mb-2">
             <label class="col-md-2 form-label"><b>{{ user_form.first_name.label }}</b></label>
-            <div class="col-md-2">{{ user_form.first_name|add_class:'form-control' }}</div>
+            <div class="col-md-2">{{ user_form.first_name }}</div>
           </div>
           <div class="row mb-2">
             <label class="col-md-2 form-label"><b>{{ user_form.last_name.label }}</b></label>
-            <div class="col-md-2">{{ user_form.last_name|add_class:'form-control' }}</div>
+            <div class="col-md-2">{{ user_form.last_name }}</div>
           </div>
           <div class="row mb-2">
             <label class="col-md-2 form-label"><b>{{ user_form.email.label }}</b></label>
-            <div class="col-md-2">{{ user_form.email|add_class:'form-control' }}</div>
+            <div class="col-md-2">{{ user_form.email }}</div>
           </div>
         </fieldset>
         <div class="form-actions col-md-6 mt-3">
@@ -87,9 +84,9 @@
             <tbody>
               {% for form in sports_formset %}
                 <tr id="id_{{sports_formset.prefix}}-{{forloop.counter0}}" class="collapse">
-                  <td>{{ form.laji|add_class:'form-control' }}</td>
-                  <td>{{ form.laji_nimi|add_class:'form-control' }}</td>
-                  <td>{{ form.laji_ryhma|add_class:'form-control' }}</td>
+                  <td>{{ form.laji }}</td>
+                  <td>{{ form.laji_nimi }}</td>
+                  <td>{{ form.laji_ryhma }}</td>
                   <td>
                     <button class="btn btn-link text-decoration-none" 
                     type="button"
@@ -136,10 +133,10 @@
             <tbody>
               {% for form in zones_formset %}
                 <tr id="id_{{zones_formset.prefix}}-{{forloop.counter0}}" class="collapse">
-                  <td>{{ form.jarj_nro|add_class:'form-control' }}</td>
-                  <td>{{ form.tehoalue|add_class:'form-control' }}</td>
-                  <td>{{ form.alaraja|add_class:'form-control'}}</td>
-                  <td>{{ form.ylaraja|add_class:'form-control' }}</td>
+                  <td>{{ form.jarj_nro }}</td>
+                  <td>{{ form.tehoalue }}</td>
+                  <td>{{ form.alaraja }}</td>
+                  <td>{{ form.ylaraja }}</td>
                   <td>
                     <button class="btn btn-link text-decoration-none" 
                       type="button" 
@@ -187,9 +184,9 @@
             <tbody>
               {% for form in seasons_formset %}
                 <tr id="id_{{seasons_formset.prefix}}-{{forloop.counter0}}" class="collapse {% if form.non_field_errors %}table-danger{% endif %}">
-                  <td>{{ form.kausi|add_class:'form-control' }}</td>
-                  <td>{{ form.alkupvm|add_class:'form-control date-picker picker-start' }}</td>
-                  <td>{{ form.loppupvm|add_class:'form-control date-picker picker-end' }}</td>
+                  <td>{{ form.kausi }}</td>
+                  <td>{{ form.alkupvm }}</td>
+                  <td>{{ form.loppupvm }}</td>
                   <td>
                     <button class="btn btn-link text-decoration-none" 
                     type="button" 
@@ -222,7 +219,7 @@
           {% for field in pw_form %}
           <div class="row mb-2">
             <label class="col-md-2 form-label"><b>{{ field.label }}</b></label>
-            <div class="col-md-2">{{ field|add_class:'form-control' }}</div>
+            <div class="col-md-2">{{ field }}</div>
             {% if field.errors %}
             <div class="col-md-4 text-danger small">{% for error in field.errors %}{{ error }} {% endfor %}</div>
             {% else %}

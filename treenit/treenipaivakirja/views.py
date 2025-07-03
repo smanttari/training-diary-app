@@ -10,7 +10,6 @@ from django.forms import inlineformset_factory, formset_factory
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.db.models import Max
@@ -20,7 +19,7 @@ from django.urls import reverse
 from django.views.decorators.debug import sensitive_variables
 
 from treenipaivakirja.models import Harjoitus, Laji, Teho, Tehoalue, Kausi, PolarUser, PolarSport, PolarSleep, PolarRecharge, OuraUser, OuraSleep
-from treenipaivakirja.forms import HarjoitusForm, LajiForm, TehoForm, TehoalueForm, UserForm, RegistrationForm, KausiForm, HarjoitusFormSet
+from treenipaivakirja.forms import HarjoitusForm, LajiForm, TehoForm, TehoalueForm, UserForm, RegistrationForm, KausiForm, HarjoitusFormSet, PwChangeForm
 import treenipaivakirja.utils as utils
 import treenipaivakirja.transformations as tr
 import treenipaivakirja.calculations as cl
@@ -681,7 +680,7 @@ def settings_view(request):
     sports_required_fields = utils.get_required_fields(Laji)
     
     user_form = UserForm(instance=user)
-    pw_form = PasswordChangeForm(user=user)
+    pw_form = PwChangeForm(user=user)
     seasons_formset = SeasonsFormset(instance=user)
     zones_formset = ZonesFormset(instance=user)
     sports_formset = SportsFormset(instance=user)
@@ -702,7 +701,7 @@ def settings_view(request):
 
         if 'pw_save' in request.POST:
             page = 'pw_reset'
-            pw_form = PasswordChangeForm(data=request.POST, user=user)
+            pw_form = PwChangeForm(data=request.POST, user=user)
             if pw_form.is_valid():
                 pw_form.save()
                 update_session_auth_hash(request, pw_form.user)
