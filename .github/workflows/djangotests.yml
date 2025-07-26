@@ -21,6 +21,7 @@ jobs:
       working-directory: ./treenit
       env:
         DEBUG: False
-        SECRET_KEY: top_secret 
+        SECRET_KEY: top_secret
+        SALT_KEY: top_secret 
       run: |
         python manage.py test
