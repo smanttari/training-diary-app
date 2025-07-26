@@ -21,6 +21,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['DEBUG']
 
+# SALT KEY for django-fernet-encrypted-fields
+SALT_KEY = os.environ['SALT_KEY']
+
 
 ALLOWED_HOSTS = []
 

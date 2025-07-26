@@ -64,6 +64,7 @@ python .\treenit\manage.py loaddata treenit\treenipaivakirja\fixtures\aika.json
 ````
 DEBUG = True
 SECRET_KEY = your_secret_key
+SALT_KEY = your_salt_key
 ````
 
 * If you wish to interact with Polar and Oura APIs set also following environment variables

@@ -3,7 +3,6 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import django_cryptography.fields
 
 
 class Migration(migrations.Migration):
@@ -18,7 +17,7 @@ class Migration(migrations.Migration):
             name='PolarUser',
             fields=[
                 ('polar_user_id', models.BigIntegerField(primary_key=True, serialize=False)),
-                ('access_token', django_cryptography.fields.encrypt(models.CharField(blank=True, max_length=500, null=True))),
+                ('access_token', models.CharField(blank=True, max_length=500, null=True)),
                 ('registration_date', models.DateTimeField(blank=True, null=True)),
                 ('latest_exercise_transaction_id', models.BigIntegerField(blank=True, null=True)),
                 ('latest_activity_transaction_id', models.BigIntegerField(blank=True, null=True)),

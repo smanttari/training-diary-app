@@ -3,7 +3,6 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import django_cryptography.fields
 
 
 class Migration(migrations.Migration):
@@ -18,8 +17,8 @@ class Migration(migrations.Migration):
             name='OuraUser',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('access_token', django_cryptography.fields.encrypt(models.CharField(blank=True, max_length=500, null=True))),
-                ('refresh_token', django_cryptography.fields.encrypt(models.CharField(blank=True, max_length=500, null=True))),
+                ('access_token', models.CharField(blank=True, max_length=500, null=True)),
+                ('refresh_token', models.CharField(blank=True, max_length=500, null=True)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

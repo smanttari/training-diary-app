@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
-from django_cryptography.fields import encrypt
+from encrypted_fields.fields import EncryptedCharField
 from treenipaivakirja.utils import coalesce, duration_to_decimal, speed_min_per_km
 
 
@@ -148,7 +148,7 @@ class Kausi(models.Model):
 
 class PolarUser(models.Model):
     polar_user_id = models.BigIntegerField(primary_key=True)
-    access_token = encrypt(models.CharField(max_length=500, null=True, blank=True))
+    access_token = EncryptedCharField(max_length=500, null=True, blank=True)
     registration_date = models.DateTimeField(null=True, blank=True)
     latest_exercise_transaction_id = models.BigIntegerField(null=True, blank=True)
     latest_activity_transaction_id = models.BigIntegerField(null=True, blank=True)
@@ -200,8 +200,8 @@ class PolarRecharge(models.Model):
 
 class OuraUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    access_token = encrypt(models.CharField(max_length=500, null=True, blank=True))
-    refresh_token = encrypt(models.CharField(max_length=500, null=True, blank=True))  
+    access_token = EncryptedCharField(max_length=500, null=True, blank=True)
+    refresh_token = EncryptedCharField(max_length=500, null=True, blank=True)  
 
     def __str__(self):
         return str(self.user_id)
