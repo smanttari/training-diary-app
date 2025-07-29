@@ -77,6 +77,7 @@ Get Current Count Of Zones
     ${user_id} =    Query  SELECT id FROM auth_user WHERE username = '${USERNAME}'
     ${count} =  Query   SELECT COUNT(id) FROM treenipaivakirja_tehoalue WHERE user_id = ${user_id}[0][0]
     Set Test Variable  ${ZONE_COUNT}  ${count}[0][0]
+    Disconnect From Database
 
 Settings Page Is Opened
     Click Link    	    nav_user

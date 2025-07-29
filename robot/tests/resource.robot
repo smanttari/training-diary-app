@@ -90,10 +90,11 @@ No Messages Should Exists
     Element Should Not Be Visible	message_box
 
 Connect To Treenit Database
-    Connect To Database Using Custom Params    sqlite3    database="${DATABASE}"
+    Connect To Database    sqlite3    database=${DATABASE}
 
 Get Latest Training Id
     Connect To Treenit Database
     ${user_id} =    Query  SELECT id FROM auth_user WHERE username = '${USERNAME}'
     ${id} =  Query   SELECT MAX(id) FROM treenipaivakirja_harjoitus WHERE user_id = ${user_id}[0][0]
     Set Test Variable  ${LATEST_TRAINING_ID}  ${id}[0][0]
+    Disconnect From Database

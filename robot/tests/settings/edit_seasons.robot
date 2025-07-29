@@ -88,6 +88,7 @@ Get Current Count Of Seasons
     ${user_id} =    Query  SELECT id FROM auth_user WHERE username = '${USERNAME}'
     ${count} =  Query   SELECT COUNT(id) FROM treenipaivakirja_kausi WHERE user_id = ${user_id}[0][0]
     Set Test Variable  ${SEASON_COUNT}  ${count}[0][0]
+    Disconnect From Database
 
 Settings Page Is Opened
     Click Link    	    nav_user

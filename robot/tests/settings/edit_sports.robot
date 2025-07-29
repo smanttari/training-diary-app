@@ -76,6 +76,7 @@ Get Current Count Of Sports
     ${user_id} =    Query  SELECT id FROM auth_user WHERE username = '${USERNAME}'
     ${count} =  Query   SELECT COUNT(id) FROM treenipaivakirja_laji WHERE user_id = ${user_id}[0][0]
     Set Test Variable  ${SPORT_COUNT}  ${count}[0][0]
+    Disconnect From Database
 
 Settings Page Is Opened
     Click Link    	    nav_user
