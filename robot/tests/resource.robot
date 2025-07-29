@@ -73,7 +73,7 @@ Log Test User In
 
 Log Out
     Click Link      	nav_user
-    Click Link    	    nav_logout
+    Click Button    	nav_logout
     Logout Page Should Be Open
 
 Delete Account

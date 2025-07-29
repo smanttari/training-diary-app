@@ -70,7 +70,11 @@
 					<div class="dropdown-menu dropdown-menu-end" aria-labelledby="user">
 						<h6 class="dropdown-header">{% if user.first_name %} {{ user.first_name}} {% else %} {{ user.username }} {% endif %}</h6>
 						<a class="dropdown-item text-primary" id="nav_settings" href="{% url 'settings' %}"><i class="fas fa-cog pe-2"></i>ASETUKSET</a>
-						<a class="dropdown-item text-primary" id="nav_logout" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt pe-2"></i>KIRJAUDU ULOS</a>
+						<form action="{% url 'logout' %}" method="post">{% csrf_token %}
+  							<button class="btn btn-link text-decoration-none dropdown-item text-primary" type="submit" id="nav_logout">
+								<i class="fas fa-sign-out-alt pe-2"></i>KIRJAUDU ULOS
+							</button>
+						</form>
 					</div>
 				</li>
 				{% else %}
