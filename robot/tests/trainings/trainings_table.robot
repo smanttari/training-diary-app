@@ -119,11 +119,11 @@ Trainings Page Is Opened
     Click Link      nav_trainings_list
 
 Table Length Is "${length}"
-    Select From List By Label       treenit_length      ${length}
+    Select From List By Label       dt-length-0      ${length}
 
 Table Page "${2}" Is Selected
     Scroll Element Into View     class:page-item
-    Click Link      2
+    Click Button      2
 
 User Selects "${sport}"
     Select From List By Label       sport       ${SPACE*3}${sport}
@@ -142,15 +142,15 @@ User Toggles Rest Days
     Click Element   restdays  
 
 User Changes Table Length to "${length}"
-    Select From List By Label       treenit_length      ${length}
+    Select From List By Label       dt-length-0      ${length}
 
 User Goes To Next Page
     Scroll Element Into View     class:next
-    Click Link   Seuraava 
+    Click Button   Seuraava 
 
 User Goes To Previous Page
     Scroll Element Into View     class:previous
-    Click Link   Edellinen 
+    Click Button   Edellinen 
 
 User Search For Word "${word}"
     Input Text  dt-search-0    ${word}

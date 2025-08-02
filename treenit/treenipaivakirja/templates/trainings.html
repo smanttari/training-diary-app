@@ -364,7 +364,6 @@ var treenitTable = $('#treenit').DataTable({
         ],
     fnDrawCallback: function( oSettings ) {
         highlightLepoRows()
-        $("select[name=treenit_length]").removeClass("form-select");
     },
     footerCallback: function ( row, data, start, end, display ) {
         var api = this.api(), data;
