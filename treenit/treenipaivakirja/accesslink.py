@@ -182,8 +182,8 @@ def get_exercises(request, polar_user):
 
 
 def parse_duration(duration):
-    h = re.findall('(\d+)H',duration)
-    m = re.findall('(\d+)M',duration)
+    h = re.findall(r'(\d+)H',duration)
+    m = re.findall(r'(\d+)M',duration)
     if len(h) > 0:
         h = int(h[0])
     else:
