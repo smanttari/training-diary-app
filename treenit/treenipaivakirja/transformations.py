@@ -6,9 +6,9 @@ import pandas as pd
 import numpy as np
 
 from treenipaivakirja.models import Harjoitus, Aika, Laji, Teho, Tehoalue, Kausi, PolarSleep, PolarRecharge, OuraSleep
-from treenipaivakirja.utils import duration_to_string, dataframe_to_dict,coalesce,parse_coordinates_from_gpx
+from treenipaivakirja.utils import duration_to_string, dataframe_to_dict,coalesce,parse_coordinates_from_gpx,remove_decimals
 from treenipaivakirja.calculations import first_training_date
-from django.db.models import Min, Q
+from django.db.models import Q
 from django.conf import settings
 
 
@@ -24,20 +24,22 @@ def trainings_to_df(user_id, columns, startdate=None, enddate=None, sport='Kaikk
     join_type = 'left' if restdays is True else 'inner'
 
     days = Aika.objects.filter(vvvvkkpp__gte=startdate,vvvvkkpp__lte=enddate).values_list('pvm','vvvvkkpp','viikonpaiva_lyh','vko')
-    days_df = pd.DataFrame(days, columns=['Pvm','vvvvkkpp','Viikonpäivä','Vko'])
+    days_df = pd.DataFrame(days, dtype=str, columns=['Pvm','vvvvkkpp','Viikonpäivä','Vko'])
     trainings = Harjoitus.objects.filter(user=user_id).values_list(
         'id','id','aika_id','kesto','kesto_h','kesto_min','laji__laji_nimi','matka','vauhti_km_h','keskisyke','tuntuma','kommentti')
-    trainings_df = pd.DataFrame(trainings, columns=[
+    trainings_df = pd.DataFrame(trainings, dtype=str, columns=[
         'edit','delete','vvvvkkpp','Kesto','h','min','Laji','Matka (km)','Vauhti (km/h)','Keskisyke','Tuntuma','Kommentti'])
     trainings_df['details'] = np.nan
     trainings_df = days_df.merge(trainings_df, how=join_type, left_on='vvvvkkpp', right_on='vvvvkkpp')
 
     # cleaning data
-    trainings_df['Laji'].fillna('Lepo', inplace=True)
+    trainings_df['Laji'] = trainings_df['Laji'].fillna('Lepo')
     trainings_df['Pvm'] = pd.to_datetime(trainings_df['Pvm']).dt.strftime(date_format)
+    trainings_df[['h','min']] = trainings_df[['h','min']].astype(float)
     trainings_df[['Matka (km)','Vauhti (km/h)']] = trainings_df[['Matka (km)','Vauhti (km/h)']].astype(float).round(1)
-    trainings_df[['delete','edit','Keskisyke','Tuntuma']] = trainings_df[['delete','edit','Keskisyke','Tuntuma']].fillna(-1).astype(int).astype(str).replace('-1', np.nan)
     trainings_df['Päivä'] = trainings_df[['Pvm','Viikonpäivä']].apply(lambda x: ' '.join(x), axis=1)
+    trainings_df['Keskisyke'] = trainings_df.apply(lambda row: remove_decimals(row['Keskisyke']), axis=1)
+    trainings_df['Tuntuma'] = trainings_df.apply(lambda row: remove_decimals(row['Tuntuma']), axis=1)
     if duration_format == 'str':
         trainings_df['Kesto'] = trainings_df.apply(lambda row: duration_to_string(row['h'], row['min']), axis=1)
 
@@ -45,8 +47,8 @@ def trainings_to_df(user_id, columns, startdate=None, enddate=None, sport='Kaikk
     zones = Teho.objects.filter(harjoitus_id__user=user_id).values_list(
         'harjoitus_id','tehoalue_id__tehoalue','kesto','kesto_h','kesto_min')
     if zones:
-        zones_df = pd.DataFrame(zones, columns=['id','teho','kesto','h','min']).fillna(np.nan)
-        zones_df['kesto'] = zones_df['kesto'].astype(float)
+        zones_df = pd.DataFrame(zones, dtype=str, columns=['id','teho','kesto','h','min'])
+        zones_df[['kesto','h','min']] = zones_df[['kesto','h','min']].astype(float)
         zones_df = zones_df.groupby(['id','teho']).sum().reset_index()
         if duration_format == 'str':
             zones_df['kesto'] = zones_df.apply(lambda row: duration_to_string(row['h'], row['min']), axis=1)
@@ -94,12 +96,12 @@ def trainings_base_to_df(user_id):
         'laji_id__laji_nimi','laji_id__laji','laji_id__laji_ryhma','vauhti_km_h','vauhti_min_km','keskisyke')
     trainings_df = pd.DataFrame(list(trainings_objects), columns=[
         'id','pvm','kesto','matka','vuosi','kk','kk_nimi','vko',
-        'laji_nimi','laji','laji_ryhma','vauhti_km_h','vauhti_min_km','keskisyke']).fillna(np.nan)
+        'laji_nimi','laji','laji_ryhma','vauhti_km_h','vauhti_min_km','keskisyke'])
     trainings_df['vuosi'] = trainings_df['vuosi'].astype(str)
     trainings_df['pvm'] = pd.to_datetime(trainings_df['pvm'])
     trainings_df[['kesto','matka','vauhti_km_h','vauhti_min_km']] = trainings_df[['kesto','matka','vauhti_km_h','vauhti_min_km']].astype(float)
     trainings_df['laji_ryhma'] = trainings_df['laji_ryhma'].astype('object')
-    trainings_df['laji_ryhma'].fillna('Muut',inplace=True)
+    trainings_df['laji_ryhma'] = trainings_df['laji_ryhma'].fillna('Muut')
     # lookup season
     season_objects = Kausi.objects.filter(user=user_id)
     date = []
@@ -226,7 +228,7 @@ def hours_per_zone_to_json(trainings_df,user_id):
     zones_objects = Teho.objects.filter(harjoitus_id__user=user_id).values_list('harjoitus_id','harjoitus_id__aika_id__vuosi','tehoalue_id__tehoalue','kesto')
     if not zones_objects:
         return json.dumps([])       
-    zones_df = pd.DataFrame(list(zones_objects),columns=['harjoitus_id','vuosi','teho','kesto']).fillna(np.nan)
+    zones_df = pd.DataFrame(list(zones_objects),columns=['harjoitus_id','vuosi','teho','kesto'])
     zones_df = zones_df.merge(trainings_df[['id','kausi']], how='inner', left_on='harjoitus_id', right_on='id')
     zones_df['kesto'] = zones_df['kesto'].astype(float)
 

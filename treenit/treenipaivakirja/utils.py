@@ -2,7 +2,6 @@ from datetime import datetime
 import xml.etree.ElementTree as ET
 
 import pandas as pd
-import numpy as np
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 
@@ -13,16 +12,16 @@ def duration_to_string(h,mins):
     """ 
     Formats duration given in hours and minutes to string "hh:mm". 
     """
-    if (h is None or np.isnan(h)) and (mins is None or np.isnan(mins)):
+    if (h is None or pd.isnull(h)) and (mins is None or pd.isnull(mins)):
         return None
-    if mins is None or np.isnan(mins):
+    if mins is None or pd.isnull(mins):
         mins = '00'
     elif mins >= 60:
         h = coalesce(h,0) + int(mins/60)
         mins = '0{}'.format(int(mins % 60))[-2:]
     else:
         mins = '0{}'.format(int(mins))[-2:]
-    if h is None or np.isnan(h):
+    if h is None or pd.isnull(h):
         h = '00'
     else:
         h = '0{}'.format(int(h))[-2:]
@@ -33,12 +32,24 @@ def duration_to_decimal(h,mins):
     """ 
     Calculates duration in hours (decimal) when given hours and minutes seperately. 
     """
-    if h is None or np.isnan(h):
+    if h is None or pd.isnull(h):
         h = 0
-    if mins is None or np.isnan(mins):
+    if mins is None or pd.isnull(mins):
         mins = 0
     hours = h + mins/60
     return hours
+
+
+def remove_decimals(digit):
+    """ 
+    Removes '.0' from end of digit.
+    """
+    if (digit is None or pd.isnull(digit)):
+        return None
+    elif '.0' in digit:
+        return digit[:-2]
+    else:
+        return digit
 
 
 def speed_min_per_km(m,s):
