@@ -626,7 +626,10 @@ def recovery(request):
 
     polar_sleep_df = tr.polar_sleep_to_df(user_id)
     if not polar_sleep_df.empty:
-        polar_sleep_duration_json = tr.sleep_duration_to_json(polar_sleep_df)
+        polar_sleep_duration_df = polar_sleep_df.set_index('date')
+        polar_sleep_duration_df[['duration','deep']] = polar_sleep_duration_df[['duration','deep']].astype(str)
+        polar_sleep_duration_df = polar_sleep_duration_df.rename(columns={'duration':'kokonaiskesto','deep':'syväuni'})
+        polar_sleep_duration_dict = utils.dataframe_to_dict(polar_sleep_duration_df[['kokonaiskesto','syväuni']])
         polar_sleep_score_json = tr.sleep_score_to_json(polar_sleep_df)
         polar_sleep_end_date = datetime.strptime(polar_sleep_df['date'].iloc[-1],'%Y-%m-%d')
 
@@ -653,7 +656,7 @@ def recovery(request):
         context = {
             'start_date': start_date,
             'end_date': end_date,
-            'polar_sleep_duration_json': polar_sleep_duration_json,
+            'polar_sleep_duration_json': json.dumps(polar_sleep_duration_dict),
             'polar_sleep_score_json': polar_sleep_score_json,
             'polar_recharge_hr_json': polar_recharge_hr_json,
             'polar_recharge_hrv_json': polar_recharge_hrv_json,

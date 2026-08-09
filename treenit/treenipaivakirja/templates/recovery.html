@@ -183,15 +183,15 @@ let optionsDuration = {
   type:'line',
   width: 800,
   height: 400,
-  margin: {top: 40, bottom: 60, left: 60, right: 60},
+  margin: {top: 40, bottom: 60, left: 60, right: 130},
   xaxis: {font: {size: 11}, orientation: 'skew', ticksCount:10, format:'%d.%m.%Y', date:true},
   yaxis: {font: {size: 11}},
   ylabel: {label: 'Kesto (h)', size: 12},
-  colors: ['#536be2'],
+  colors: ['#536be2','#8187b2'],
   grid: true,
   tooltip: {suffix:" h"},
   line: {labels:false},
-  movingAvg: {windowSize:7, color: '#fd397a'},
+  legend: {coord: {x: 700, y: 50}, font: {size: 11}},
   responsiveness: true
   }
 

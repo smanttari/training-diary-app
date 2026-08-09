@@ -287,8 +287,8 @@ def seasons_to_list(user_id):
 
 def polar_sleep_to_df(user_id):
     sleep = PolarSleep.objects.filter(polar_user_id__user=user_id).values_list(
-        'date','duration','sleep_score').order_by('date')
-    sleep_df = pd.DataFrame(sleep, columns = ['date','duration','score'])
+        'date','duration','sleep_score','deep_sleep').order_by('date')
+    sleep_df = pd.DataFrame(sleep, columns = ['date','duration','score','deep'])
     sleep_df['date'] = sleep_df['date'].astype(str)
     return sleep_df
 
